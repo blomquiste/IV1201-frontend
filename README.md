@@ -17,43 +17,46 @@ PostgreSQL
 
 ## Setup
 * Install Node.js and PostgreSQL
-* Create the databse by runing the existing-database.sql script in psql
+* Create the database by running the existing-database.sql script in psql
 * Clone this repository ```git clone ...```
-* In you teminal, go the the cloned directory ```cd .../IV1201```
-* Install all required packaged with npm install in both frontend and backend directories ```cd backend; npm install; cd ../frontend; npm install```
+* In you terminal, go to the cloned directory ```cd .../IV1201```
+* Install all required packages with npm install in both frontend and backend directories ```cd backend; npm install; cd ../frontend; npm install```
 * In both backend and frontend run ```npm start```
 
 ## File structure
 ```
-IV1201
-├──frontend
-|   ├── src
-|   │   ├── integration
-|   |   │   └── DBCaller.js.js
-|   │   ├── presenter
-|   |   │   ├── LoginPresenter.js
-|   |   │   ├── RegistrationPresenter.js
-|   |   │   └── ...
-|   │   └── view
-|   |   │   ├── LoginView.js
-|   |   │   ├── RegistrationView.js
-|   |   │   └── ...
-|   └── package.json
-|   └── App.js - acts as the head controller
-|   └── ...
-├──backend
-|    ├── src
-|    │   ├── api -> this is the view, this is called by express
-|    │   |  ├── login.js
-|    │   |  └── registration.js
-|    │   ├── controller -> calls integration and model layers
-|    │   ├── model -> application state
-|    │   ├── integration -> database calls
-|    │      └── DAO.js
-|    │   ├── util
-|    |   └── server.js
-|    └── package.json
-|    └── ...
+IV1201-frontend
+├── src
+│   ├── integration
+│   │   └── DBCaller.js
+│   ├── presenter
+│   │   ├── ApplicationPresenter.js
+│   │   ├── ApplyformPresenter.js
+│   │   ├── LoginPresenter.js
+│   │   ├── OverviewPresenter.js
+│   │   └── RegistrationPresenter.js
+│   ├── styling
+│   │   └── forms.css
+│   ├── view
+│   │   ├── ApplicationView.js
+│   │   ├── AvailabilityView.js
+│   │   ├── ErrorView.js
+│   │   ├── ExperienceView.js
+│   │   ├── FailedLoginView.js
+│   │   ├── LoginView.js
+│   │   ├── OverviweView.js
+│   │   ├── RegistrationView.js
+│   │   ├── SummaryView.js
+│   │   ├── UserCardView.js
+│   │   └── UserView.js
+│   ├── App.css
+│   ├── App.js - acts as the head controller
+│   ├── App.test.js 
+│   ├── firebaseConfig.js
+│   ├── index.css
+│   ├── logo.svg
+│   ├── reportWebVitals.js
+│   └── setupTests.js
 └── package.json
 ```
 
