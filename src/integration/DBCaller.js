@@ -55,8 +55,7 @@ async function callAPI(url, data){
     const result = await response.json()
     //console.log("dbc")
     //console.log(result);
-    return result;
-  }catch(e) {
+    return result; }catch(e) {
     console.log(e);
   }
 }
@@ -93,5 +92,94 @@ async function saveRegistrationData(userdata) {
     return false;
   }
 }
+async function saveUpdatedData(data){
+  try {
+    const response = await fetch('https://archdes-abbcfaefce39.herokuapp.com/update',{
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+    mode:'cors'
+    });
+    if (response.status === 201) {
+      console.log("Update successful")
+      return true;
+    }
+    if (!response.ok) {
+      throw new Error('Failed to update personal information');
+    }
+  }catch(e){
+    console.error(e);
+  }
+}
+async function fetchTable() {
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch';
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors'
+    });
+    console.log(response)
+    if (!response.ok) {
+      return response.status;
+    }
+    const data = await response.json();
+    console.log("DBCaller: ", data)
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+async function setAvailability(data){
+  try {
+    const response = await fetch('https://archdes-abbcfaefce39.herokuapp.com/availability',{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      mode:'cors'
+    });
+    if (response.status === 201) {
+      console.log("Availability added.")
+    }
+    if (!response.ok) {
+      throw new Error('Failed to add availability.');
+    }
+  }catch(e){
+    console.error(e);
+  }
+}
+async function saveApplicationData(data){
+  try {
+    const response = await fetch('https://archdes-abbcfaefce39.herokuapp.com/registration', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      mode:'cors'
+    });
+    // Check for both 200 and 201 status codes
+    if (response.status === 200 || response.status === 201) {
+      console.log("Registration successful")
+      return true;
+    }
+    if (!response.ok) {
+      throw new Error('Failed to save registration data');
+    }
+  } catch (error) {
+    console.error('Error saving registration data:', error);
+    return false;
+  }
+}
 
-export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail}
+export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, saveApplicationData, setAvailability}
