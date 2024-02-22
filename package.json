@@ -2,7 +2,7 @@
   "name": "IV1201 project client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://archdes-frontend-5528c891010d.herokuapp.com/",
+  "homepage": "/",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
