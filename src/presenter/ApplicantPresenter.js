@@ -14,17 +14,23 @@ import {fetchTable, saveUpdatedData} from '../integration/DBCaller'
  * @returns {*|JSX.Element}
  * @constructor
  */
-export default function Applicant({ user, handleSave }) {
+export default function Applicant({ user, sendApplication }) {
     const [competenceObject, setCompetenceObject] = useState(null);
     const [updated, setUpdated] = useState(false);
     const [activeComponent, setActiveComponent] = useState(1);
     const [formData, setFormData] = useState({
         //user: {},
-        competence: {},
-        availability: {}
+        competences: [],
+        availabilities: []
     });
     const showNext = () => {
-        setActiveComponent((prevActiveComponent) => prevActiveComponent + 1);
+        console.log("Show next clicked");
+        if (activeComponent !== 4) {
+            setActiveComponent((prevActiveComponent) => prevActiveComponent + 1);
+        } else {
+            setActiveComponent(1); // Set activeComponent to 1 if on the SummaryView
+        }
+        console.log("New active component:", activeComponent);
     };
     async function updateData(data){
         try {
@@ -41,7 +47,7 @@ export default function Applicant({ user, handleSave }) {
     /**
      * Fetching rows from table competence in db,
      */
-    async function fetchCompetences() {
+    async function fetchCompetenceAreas() {
         if(!competenceObject){
             try {
                 const response = await fetchTable();
@@ -53,22 +59,23 @@ export default function Applicant({ user, handleSave }) {
     const handleCompetenceSave = (competenceData) => {
         setFormData(prevData => ({
             ...prevData,
-            competence: competenceData
+            competences: [...prevData.competences, ...competenceData]
         }));
         showNext();
     };
     const handleAvailabilitySave = (availabilityData) =>{
         setFormData(prevData => ({
             ...prevData,
-            availability: availabilityData
+            availabilities: [...prevData.availabilities, ...availabilityData]
         }));
         showNext();
     }
+
     return (<div>
         <NavigationBar user={user}/>
         {activeComponent===1 && <UserCardView user={user} handleSave={updateData} showNext={showNext}/>}
-        {activeComponent===2 && <CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} fetchCompetences={fetchCompetences} showNext={showNext}/>}
+        {activeComponent===2 && <CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} fetchCompetenceAreas={fetchCompetenceAreas} showNext={showNext}/>}
         {activeComponent===3 && <AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext}/>}
-        {activeComponent===4 && <SummaryView formData={formData} />}
+        {activeComponent===4 && <SummaryView formData={formData} sendApplication={sendApplication} showNext={showNext} />}
     </div>);
 }

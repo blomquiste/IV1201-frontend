@@ -44,9 +44,15 @@ button {
     color: white;
     padding: 12px 24px;
     margin: 14px;
-    font-size: 22px;
+    font-size: 16px;
     border-radius: 8px;
     cursor: pointer;
+}
+.remove{
+    background: indianred;
+}
+.cancel, .change, .add {
+    background: grey;
 }
 .error-message{
     font-size: 0.7rem;
