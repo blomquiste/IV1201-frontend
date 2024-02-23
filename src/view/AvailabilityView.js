@@ -65,7 +65,7 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
                         ))}
                     </ul>
                 </div>
-                <button onClick={() => {if(formik.isValid && formik.dirty){handleAvailabilitySave(availabilityChoices)}}}>Next</button>
+                <button onClick={() => {if(formik.isValid){handleAvailabilitySave(availabilityChoices)}}}>Next</button>
             </div>
         </div>
     )

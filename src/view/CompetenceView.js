@@ -20,7 +20,7 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
             yearsOfExperience: [],
         },
         onSubmit: async (values)=>{
-            if (values.expertise.length > 0 && values.yearsOfExperience.length > 0){
+            if (values.expertise && values.yearsOfExperience ){
                 setCompetenceChoices([...competenceChoices, values]);
             }
             await formik.resetForm();
@@ -28,7 +28,7 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
         validate: values => {
             let errors = {}
             if(!values.expertise){errors.expertise = "Required"}
-            if(!values.yearOfExperience){errors.yearsOfExperience = "Required" }
+            if(!values.yearsOfExperience){errors.yearsOfExperience = "Required" }
             return errors
         }
     })
@@ -44,8 +44,7 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
                             name={"expertise"}
                             onChange={formik.handleChange}
                             value={Array.isArray(formik.values.expertise) ? formik.values.expertise[0] : formik.values.expertise}
-                            onClick={fetchCompetenceAreas}
-                            onBlur={formik.handleBlur}>
+                            onClick={fetchCompetenceAreas}>
                             <option value="" label="Select area of expertise"></option>
                             {/* Render a disabled option with loading message while competences are being fetched */}
                             {!competences ? (
@@ -61,20 +60,20 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
                                 </>
                             )}
                         </select>
-                        {formik.touched.expertise && formik.errors.expertise ?
+                        {formik.errors.expertise ?
                             <div className={"error-message"}>{formik.errors.expertise}</div> : null}
                     </div>
                     <div className={"inputGroup"}>
-                        <label htmlFor={"yearOfExperience"}>Experience within the field</label>
+                        <label htmlFor={"yearsOfExperience"}>Experience within the field</label>
                         <input  type={"number"}
-                                id={"yearOfExperience"}
-                                name={"yearOfExperience"}
+                                id={"yearsOfExperience"}
+                                name={"yearsOfExperience"}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={Array.isArray(formik.values.yearsOfExperience) ? formik.values.yearsOfExperience[0] : formik.values.yearsOfExperience}
                                 placeholder={"months"}>
                         </input>
-                        {formik.touched.yearsOfExperience && formik.errors.yearsOfExperience ?
+                        {formik.errors.yearsOfExperience ?
                         <div className={"error-message"}>{formik.errors.yearsOfExperience}</div> : null}
                     </div>
                     <button type={"submit"} className={"add"}>Add</button>
@@ -92,7 +91,7 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
                     </ul>
                 </div>
             </div>
-            <button onClick={() => {if(formik.isValid && formik.dirty) { handleCompetenceSave(competenceChoices) }}
+            <button onClick={() => {if(formik.isValid) { handleCompetenceSave(competenceChoices) }}
             }>Next</button>
         </div>
     )

@@ -30,7 +30,6 @@ export default function Applicant({ user, sendApplication }) {
         } else {
             setActiveComponent(1); // Set activeComponent to 1 if on the SummaryView
         }
-        console.log("New active component:", activeComponent);
     };
     async function updateData(data){
         try {
