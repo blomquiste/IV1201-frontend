@@ -10,10 +10,11 @@ Our application follows a semi-monolithic architecture, combining client-side re
 ### Frontend
 On the frontend, we use the JavaScript library React for building component-based user interfaces.
 ### Backend
-The backend is powered by Node.js and Express, handling server-side logic, data processing, and API endpoints.
-
+The backend server can be found here: (https://github.com/blomquiste/IV1201-backend/tree/main)
 ### Database
 PostgreSQL
+### Deployment
+Heroku
 
 ## Setup
 * Install Node.js and PostgreSQL
