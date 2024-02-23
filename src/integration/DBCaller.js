@@ -4,6 +4,8 @@
  * @returns a user json object on a succesful authentication, 
  * otherwise returns an int with the http error status.
  */
+
+//const URL = 'https://archdes-abbcfaefce39.herokuapp.com/';
 async function Authenticate(usernameAndPassword){
   const URL = 'login';
   return await callAPI(URL, usernameAndPassword)
@@ -38,7 +40,8 @@ async function updateAccountByEmail(userdata){
  * @returns HTTP responseif response status is 200, otherwise returns response status code.
  */
 async function callAPI(url, data){
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/';
+  //const URL = 'http://localhost:8000';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
   try{
     const response = await fetch(URL + url, 
       {method: 'POST',
@@ -48,18 +51,14 @@ async function callAPI(url, data){
       },
       body: JSON.stringify(data)}
       ,{mode:'cors'},);
-    //console.log("dbcaller in frontend")
-    //console.log(response)
     if(response.status !== 200)
       return response.status;
     const result = await response.json()
-    //console.log("dbc")
-    //console.log(result);
-    return result; }catch(e) {
+    return result;
+  }catch(e) {
     console.log(e);
   }
 }
-
 
 /**
  * Calls backend api to register a new user.
@@ -67,10 +66,11 @@ async function callAPI(url, data){
  * @returns {Promise<boolean>} True if response status is 200 or 201
  */
 async function saveRegistrationData(userdata) {
-  //console.log("integration: ", JSON.stringify(userdata));
+  //const URL = 'http://localhost:8000/registration';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/registration'
   try {
     // Make a POST request to the backend API endpoint for saving registration data
-    const response = await fetch('https://archdes-abbcfaefce39.herokuapp.com/registration', {
+    const response = await fetch(URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -92,9 +92,17 @@ async function saveRegistrationData(userdata) {
     return false;
   }
 }
+
+/**
+ * Calls the api function that updates the rows in the table 'person'
+ * @param data
+ * @returns {Promise<boolean>}
+ */
 async function saveUpdatedData(data){
+  //const URL = 'http://localhost:8000/update';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/update'
   try {
-    const response = await fetch('https://archdes-abbcfaefce39.herokuapp.com/update',{
+    const response = await fetch(URL,{
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -114,8 +122,14 @@ async function saveUpdatedData(data){
     console.error(e);
   }
 }
+
+/**
+ * Calls the api that gets the rows contents from the table 'competences'
+ * @returns {Promise<number|any>}
+ */
 async function fetchTable() {
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch';
+  //const URL = 'http://localhost:8000/fetch';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
   try {
     const response = await fetch(URL, {
       method: 'GET',
@@ -136,9 +150,37 @@ async function fetchTable() {
     console.error(e);
   }
 }
-async function setAvailability(data){
+async function setCompetence(data){
+  const URL = 'http://localhost:8000/competence';
   try {
-    const response = await fetch('https://archdes-abbcfaefce39.herokuapp.com/availability',{
+    const response = await fetch(URL,{
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      mode:'cors'
+    });
+    if (response.status === 201) {
+      console.log("Competence added.")
+    }
+    if (!response.ok) {
+      return response.status;
+    }
+  }catch(e){
+    console.error(e);
+  }
+}
+/**
+ * Calls the api that sets the rows contents from the table 'availability'
+ * @param data
+ * @returns {Promise<void>}
+ */
+async function setAvailability(data){
+  const URL = 'http://localhost:8000/availability';
+  try {
+    const response = await fetch(URL,{
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -151,15 +193,22 @@ async function setAvailability(data){
       console.log("Availability added.")
     }
     if (!response.ok) {
-      throw new Error('Failed to add availability.');
+      return response.status;
     }
   }catch(e){
     console.error(e);
   }
 }
+
+/**
+ *
+ * @param data
+ * @returns {Promise<boolean>}
+ *
 async function saveApplicationData(data){
+  const URL = 'http://localhost:8000/application';
   try {
-    const response = await fetch('https://archdes-abbcfaefce39.herokuapp.com/registration', {
+    const response = await fetch(URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -180,6 +229,6 @@ async function saveApplicationData(data){
     console.error('Error saving registration data:', error);
     return false;
   }
-}
+}*/
 
-export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, saveApplicationData, setAvailability}
+export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability}

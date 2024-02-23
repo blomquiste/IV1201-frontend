@@ -1,16 +1,26 @@
 import {useFormik} from "formik";
-import React from "react";
-import ArrowButton from "../components/ArrowButton";
+import React, {useState} from "react";
 
 export default function AvailabilityView({props, handleAvailabilitySave}) {
+    const [availabilityChoices, setAvailabilityChoices] = useState([]);
+    //handleAvailabilitySave(values);
+
+    const handleRemoveAvailability = (index) => {
+        formik.resetForm();
+        const updatedAvailabilityChoices = [...availabilityChoices];
+        updatedAvailabilityChoices.splice(index, 1);
+        setAvailabilityChoices(updatedAvailabilityChoices);
+    };
+
     const formik = useFormik({
         initialValues: {
-            start: "",
-            end: "",
+            start: [],
+            end: [],
         },
         onSubmit: async (values)=>{
+            setAvailabilityChoices([...availabilityChoices, values]);
+            formik.resetForm();
             console.log(values);
-            handleAvailabilitySave(values);
         },
         validate: values => {
             let errors = {}
@@ -42,8 +52,20 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
                                onChange={formik.handleChange}/>
                         {formik.errors.end ? <div className={"error-message"}>{formik.errors.end}</div> : null}
                     </div>
-                    <ArrowButton type={"submit"}/>
+                    <button type={"submit"}>Add</button>
                 </form>
+                <div className={"userDataContainer"}>
+                    <h2>Your availabilities</h2>
+                    <ul>
+                        {/* Render all choices */}
+                        {availabilityChoices.map((choice, index) => (
+                            <li key={index}>
+                                {choice.start} - {choice.end} <button className={"remove"} onClick={() => handleRemoveAvailability(index)}>Remove</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <button onClick={() => {if(formik.isValid){handleAvailabilitySave(availabilityChoices)}}}>Next</button>
             </div>
         </div>
     )
