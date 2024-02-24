@@ -1,8 +1,6 @@
 import React from "react";
 import '../styling/forms.css';
-import '../components/ArrowButton'
 import {useFormik} from "formik";
-import ArrowButton from "../components/ArrowButton";
 
 export default function UserCardView({user, handleSave, showNext}) {
     async function storeUserData(values){
@@ -10,6 +8,7 @@ export default function UserCardView({user, handleSave, showNext}) {
             const data = {...values, person_id: user.person_id}
             console.log("Values send from form: ", data);
             await handleSave(data);
+            showNext();
         } catch (error) {
             console.error('Error updating user information:', error);
         }
@@ -24,7 +23,6 @@ export default function UserCardView({user, handleSave, showNext}) {
         },
         onSubmit: async (values)=>{
             await storeUserData(values);
-            showNext();
         },
         validate: values => {
             let errors = {}
@@ -63,7 +61,8 @@ export default function UserCardView({user, handleSave, showNext}) {
                                 name="surname"
                                 value={formik.values.surname}
                                 onChange={formik.handleChange}/>
-                            {formik.errors.surname ? <div className={"error-message"}>{formik.errors.surname}</div> : null}
+                            {formik.errors.surname ?
+                                <div className={"error-message"}>{formik.errors.surname}</div> : null}
                         </div>
                     </div>
                     <div className="inputGroup">
@@ -86,9 +85,10 @@ export default function UserCardView({user, handleSave, showNext}) {
                             onChange={formik.handleChange}/>
                         {formik.errors.email ? <div className={"error-message"}>{formik.errors.email}</div> : null}
                     </div>
-                <ArrowButton type={"submit"}/>
-            </form>
+                    <button type={"Submit"} className={"change"}>Change</button>
+                </form>
             </div>
+            <button onClick={showNext}>Go to the application</button>
         </div>
     )
 }

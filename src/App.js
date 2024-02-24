@@ -5,7 +5,13 @@ import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import Error from "./view/ErrorView";
 
-import {Authenticate, saveRegistrationData, restoreAccountByEmail, saveApplicationData, saveUpdatedData, setAvailability} from './integration/DBCaller'
+import {
+    Authenticate,
+    saveRegistrationData,
+    restoreAccountByEmail,
+    setCompetence,
+    setAvailability,
+} from './integration/DBCaller'
 import React, { useState, useEffect } from "react";
 import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
 
@@ -21,13 +27,13 @@ import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-
  *        ErrorView - shows simple error message on server error during api calls.
  */
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [userObject, setUserObject] = useState({});
-  const[failedLogin, setFailedLogin] = useState(false);
-  
-  const[error, setError] = useState(false);
-  const [registered, setRegistered] = useState(false);
-const [applicationSubmitted, setApplicationSubmitted] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [userObject, setUserObject] = useState({});
+    const[failedLogin, setFailedLogin] = useState(false);
+
+    const[error, setError] = useState(false);
+    const [registered, setRegistered] = useState(false);
+    const [applicationSubmitted, setApplicationSubmitted] = useState(false);
 
     useEffect(() => {
     // Check sessionStorage on page load
@@ -51,8 +57,9 @@ const [applicationSubmitted, setApplicationSubmitted] = useState(false);
     try{
       if(response === 404)
         setFailedLogin(true)
-      else if(response === 500)
+      else if(response === 500){
         throw new Error("500 http code from server")
+      }
       else{
         console.log("loginpresenter")
         console.log(response)
@@ -88,23 +95,53 @@ const [applicationSubmitted, setApplicationSubmitted] = useState(false);
         }
     }
 
+    /**
+     *
+     * @param email
+     * @returns {Promise<void>}
+     */
   async function updateUserData(email){
     console.log("jsoning email")
     console.log(JSON.stringify(email))
     restoreAccountByEmail(email)
   }
-  async function sendApplication(data){
+
+    async function sendApplication(data){
         try {
-            const response = await saveApplicationData(data);
-            if (response) {
-                console.log('Application sent successfully');
-                setApplicationSubmitted(true);
-            } else {
-                console.error('Submission failed:', response.statusText);
-                setApplicationSubmitted(false);
-            }
+            const { competences, availabilities } = data;
+            console.log(competences);
+            console.log(availabilities);
+            await sendCompetence(competences);
+            await sendAvailability(availabilities);
+            setApplicationSubmitted(true);
+            console.log("Application sent successfully");
+        } catch (error) {
+            console.error("Error submitting application:", error);
+            setApplicationSubmitted(false);
+        }
+    }
+    async function sendCompetence(data){
+        console.log(data);
+        try {
+            await Promise.all(data.map(setCompetence));
+            console.log("Competences sent successfully");
+        } catch (e) {
+            console.error("Error sending competences:", e);
+        }
+    }
+
+    /**
+     * Sends the users application by calling 'saveApplicationData' in the DBCaller
+     * @param data
+     * @returns {Promise<void>}
+     */
+  async function sendAvailability(data){
+        console.log(data);
+        try {
+            await Promise.all(data.map(setAvailability));
+            console.log("Availabilities sent successfully");
         }catch(e){
-            console.error('Error submitting users application:', e)
+            console.error("Error sending availabilities:", e);
         }
   }
 
@@ -124,8 +161,7 @@ const [applicationSubmitted, setApplicationSubmitted] = useState(false);
                 <Route path="/register" element={!error && <Registration/>}/>
                 <Route path="/apply" element={loggedIn ? <Applicant
                         user = {userObject}
-                        sendApplication={sendApplication}
-                        /> : <Error/>} />
+                        sendApplication={sendApplication} /> : <Error/>} />
                 <Route path="/error" element={error && <Error/>}  />
                 
             </Routes>
@@ -133,5 +169,4 @@ const [applicationSubmitted, setApplicationSubmitted] = useState(false);
       <div>{error && <Error/>}</div>
     </div>)
 }
-
 export default App;

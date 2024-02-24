@@ -2,29 +2,39 @@ import React, { useState, useEffect } from "react";
 import {Link} from 'react-router-dom';
 import {useFormik, Field} from 'formik'
 import '../styling/forms.css'
-import ArrowButton from "../components/ArrowButton";
+import '../styling/application.css'
 
-export default function CompetenceView({ fetchCompetences, competences, handleCompetenceSave }) {
+export default function CompetenceView({ fetchCompetenceAreas, competences, handleCompetenceSave, showNext }) {
+    const [competenceChoices, setCompetenceChoices] = useState([]);
+
+    const handleRemoveCompetence = (index) => {
+        formik.resetForm();
+        const updatedCompetenceChoices = [...competenceChoices];
+        updatedCompetenceChoices.splice(index, 1);
+        setCompetenceChoices(updatedCompetenceChoices);
+    };
 
     const formik = useFormik({
         initialValues: {
-            expertise: '',
-            yearOfExperience: '',
+            expertise: [],
+            yearsOfExperience: [],
         },
         onSubmit: async (values)=>{
-            console.log(values);
-            handleCompetenceSave(values);
+            if (values.expertise && values.yearsOfExperience ){
+                setCompetenceChoices([...competenceChoices, values]);
+            }
+            await formik.resetForm();
         },
         validate: values => {
             let errors = {}
             if(!values.expertise){errors.expertise = "Required"}
-            if(!values.yearOfExperience){errors.yearOfExperience = "Required" }
+            if(!values.yearsOfExperience){errors.yearsOfExperience = "Required" }
             return errors
         }
-
     })
+
     return (<div className={"mainContainer"}>
-            <p>Please enter your field of expertise and your experience in the field.</p>
+            <h2>Please enter your field of expertise and your experience in the field.</h2>
             <div className={"inputContainer"}>
                 <form onSubmit={formik.handleSubmit}>
                     <div className={"inputGroup"}>
@@ -33,8 +43,8 @@ export default function CompetenceView({ fetchCompetences, competences, handleCo
                             id={"expertise"}
                             name={"expertise"}
                             onChange={formik.handleChange}
-                            value={formik.values.expertise}
-                            onClick={fetchCompetences}>
+                            value={Array.isArray(formik.values.expertise) ? formik.values.expertise[0] : formik.values.expertise}
+                            onClick={fetchCompetenceAreas}>
                             <option value="" label="Select area of expertise"></option>
                             {/* Render a disabled option with loading message while competences are being fetched */}
                             {!competences ? (
@@ -54,29 +64,35 @@ export default function CompetenceView({ fetchCompetences, competences, handleCo
                             <div className={"error-message"}>{formik.errors.expertise}</div> : null}
                     </div>
                     <div className={"inputGroup"}>
-                        <label htmlFor={"yearOfExperience"}>Years of experience</label>
-                        <select id={"yearOfExperience"}
-                                name={"yearOfExperience"}
+                        <label htmlFor={"yearsOfExperience"}>Experience within the field</label>
+                        <input  type={"number"}
+                                id={"yearsOfExperience"}
+                                name={"yearsOfExperience"}
                                 onChange={formik.handleChange}
-                                value={formik.values.yearOfExperience}>
-                            <option value="" label="Select years of experience"></option>
-                            <option value={"less than 1 year"}> less than 1 year</option>
-                            <option value={"1-2 years"}>1-2 years</option>
-                            <option value={"2-5 years"}>2-5 years</option>
-                            <option value={"More than 5 years"}> More than 5 years</option>
-                        </select>
-                        {formik.errors.yearOfExperience ?
-                        <div className={"error-message"}>{formik.errors.yearOfExperience}</div> : null}
+                                onBlur={formik.handleBlur}
+                                value={Array.isArray(formik.values.yearsOfExperience) ? formik.values.yearsOfExperience[0] : formik.values.yearsOfExperience}
+                                placeholder={"months"}>
+                        </input>
+                        {formik.errors.yearsOfExperience ?
+                        <div className={"error-message"}>{formik.errors.yearsOfExperience}</div> : null}
                     </div>
-                    {/* Render the user's choices */}
-                    <div className={"userDataContainer"}>
-                        <h2>Your Choices:</h2>
-                        <p>Area of expertise: {formik.values.expertise}</p>
-                        <p>Years of experience: {formik.values.yearOfExperience}</p>
-                    </div>
-                    <ArrowButton type={"submit"}/>
+                    <button type={"submit"} className={"add"}>Add</button>
                 </form>
+                <div className={"userDataContainer"}>
+                    <h2>Your competences</h2>
+                    <ul>
+                        {/* Render all choices */}
+                        {competenceChoices.map((choice, index) => (
+                            <li key={index}>
+                                {choice.expertise}, {choice.yearsOfExperience} months <button className={"remove"}
+                                                                                             onClick={() => handleRemoveCompetence(index)}>Remove</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
+            <button onClick={() => {if(formik.isValid) { handleCompetenceSave(competenceChoices) }}
+            }>Next</button>
         </div>
     )
 }
