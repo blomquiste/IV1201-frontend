@@ -200,6 +200,30 @@ async function setAvailability(data){
   }
 }
 
+async function fetchApplications() {
+  const URL = 'http://localhost:8000/fetchapplications';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors'
+    });
+    console.log(response)
+    if (!response.ok) {
+      return response.status;
+    }
+    const data = await response.json();
+    console.log("DBCaller: ", data)
+    return data;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 /**
  *
  * @param data
@@ -231,4 +255,4 @@ async function saveApplicationData(data){
   }
 }*/
 
-export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability}
+export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability, fetchApplications}

@@ -1,24 +1,33 @@
 import '../styling/forms.css'
-import React, { useState } from 'react';
 
 function OverviewView(props) {
-    //Login check
 
-    //Sort functionality
+    function sortHandlerACB(e) {props.onSort(e.target.value)}
+    function renderSortACB(opt, i) {return <option key={i} value={opt}>{opt}</option>}
 
-    //Clickable applications -> show current application
-
-    function renderApplicationsACB() {
-
+    function renderApplicationsACB(application, index) {
+        console.log(application)
+        function detailHandlerACB() {
+            props.onApplication(application.person_id)
+            window.location.hash="#/details"
+        }
+        return (
+            <span key={index} onClick={detailHandlerACB}>
+                {props.application.name}
+                {props.application.surname}
+                {props.application.status}
+            </span>
+        )
     }
 
     return (
-        <div>{props.applications.map(renderApplicationsACB)}</div>,
-    <div>
-
-        //Rendering all applications, showing:
-        //  Full name
-            //  Status (accepted | rejected | unhandled)
+        <div>
+            <select onChange={sortHandlerACB}>
+                <option value={props.sortOptions || ""}>Sort</option>
+                {props.sortOptions.map(renderSortACB)}
+            </select>,
+            {console.log(props.applications)}
+            {props.applications.map(renderApplicationsACB)}
         </div>
     )
 }

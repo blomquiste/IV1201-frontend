@@ -4,6 +4,7 @@ import Registration from "./presenter/RegistrationPresenter";
 import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import Error from "./view/ErrorView";
+import Overview from "./presenter/OverviewPresenter"
 
 import {
     Authenticate,
@@ -162,8 +163,9 @@ function App() {
                 <Route path="/apply" element={loggedIn ? <Applicant
                         user = {userObject}
                         sendApplication={sendApplication} /> : <Error/>} />
+                <Route path="/overview" element={!error && <Overview/>}/>
                 <Route path="/error" element={error && <Error/>}  />
-                
+
             </Routes>
         </Router>
       <div>{error && <Error/>}</div>

@@ -1,16 +1,22 @@
 import OverviewView from "../view/OverviewView";
 import React, {useState} from "react";
-import {Link} from 'react-router-dom';
+import {fetchApplications} from "../integration/DBCaller";
 
 export default function Overview(props) {
-    //TODO send list of applications to View
-    //TODO make it sortable
-
-    //TODO ta bort TODOS
+    const sortOptions = ["First name", "Surname", "Application status"]
+    function sortApplications(variable) {
+        //TODO sort according to variable
+    }
+    async function onApplication(person_id) {
+        //TODO
+    }
 
     return (
-        <OverviewView>
-
-        </>
+        <OverviewView
+            applications={fetchApplications()}
+            onApplication={onApplication()}
+            sortOptions={sortOptions}
+            onSort={sortApplications()}
+        />
     )
 }
