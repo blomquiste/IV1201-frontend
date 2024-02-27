@@ -40,12 +40,13 @@
 .nav-bar {
   position: fixed;
   display: flex;
-  justify-content: space-between; /* Align items with space between */
-  align-items: center; /* Vertically center items */
+  justify-content: space-between;
+  align-items: center;
   margin: 10px;
   width: calc(100% - 20px); /* Adjust width to accommodate margin */
 }
 
 .nav-bar a {
   margin-left: auto; /* Move sign-out link to the right */
+  margin-right: auto; /* Move my-page link to the left */
 }

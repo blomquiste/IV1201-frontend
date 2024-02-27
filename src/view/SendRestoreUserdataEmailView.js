@@ -25,10 +25,13 @@ export default function SendRestoreUserdataEmailView(props){
   return <div>
     <div className={"mainContainer"}>
             <h3>If you already have an account from earlier put in your email and 
-                a code will be sent allowing you to 
+                a code will be sent allowing you to enter a username and password.
             </h3>
-            {props.emailNotFound && <div>Email address was not found in user database 
-                or username and password exists for that user or the email domain does not exist</div>}
+            {props.emailNotFound && <div className={"error-message"}>
+                <p>Email address was not found</p>
+                <p>or username and password already exists for this user</p>
+                <p>or the email domain does not exist</p>
+                 </div>}
             <div className={"inputContainer"}>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="inputGroup">

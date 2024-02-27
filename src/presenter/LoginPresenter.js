@@ -15,9 +15,9 @@ import Applicant from "./ApplicantPresenter";
  */
 export default function Login(props) {
     return (<>
-        <div>{!props.loggedIn && !props.failedLogin && <LoginView onLogin={props.callDB}/>}</div>
+        <div>{!props.loggedIn && !props.failedLogin && <LoginView onLogin={props.handleLogin}/>}</div>
         <div>{props.loggedIn && <Applicant user={props.user}/>}</div>
-        <div>{props.failedLogin && <FailedLoginView onLogin={props.callDB}/>}</div>
+        <div>{props.failedLogin && <FailedLoginView onLogin={props.handleLogin}/>}</div>
     </>
     )
 }

@@ -42,9 +42,9 @@ button {
     border: none;
     background: darkolivegreen;
     color: white;
-    padding: 12px 24px;
+    padding: 8px 20px;
     margin: 14px;
-    font-size: 16px;
+    font-size: 14px;
     border-radius: 8px;
     cursor: pointer;
 }
@@ -65,7 +65,7 @@ button {
     font-weight: 500;
     color: red;
     margin-top: 0.001rem;
-    height: 1rem; /* Set a fixed height for error messages */
+    /*height: 1rem; Set a fixed height for error messages */
     overflow: hidden; /* Hide any overflow */
 }
 .inputGroup .error-message {

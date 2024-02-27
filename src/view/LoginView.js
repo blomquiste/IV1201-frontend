@@ -45,7 +45,7 @@ function LoginView(props) {
                            placeholder="Password"
                            className={"inputBox"}/>
                 </div>
-                {error && <div style={{ color: 'red' }}>{error}</div>}
+                {error && <div className={"error-message"}>{error}</div>}
                 <button type="submit" onClick={loginACB}>Log in</button>
             </form>
             <p>Not registered? <Link to={"/register"}>Sign up here</Link></p>
