@@ -219,9 +219,7 @@ async function fetchApplicants() {
     if (!response.ok) {
       return response.status;
     }
-    const data = await response.json();
-    //console.log("DBCaller: ", data)
-    return data;
+    return await response.json();;
   } catch (e) {
     console.error('Error fetching data', e);
   }
