@@ -1,16 +1,20 @@
 import OverviewView from "../view/OverviewView";
-import React, {useEffect, useState} from "react";
-import {fetchApplications} from "../integration/DBCaller";
+import React, {useState} from "react";
+import {fetchApplicants} from "../integration/DBCaller";
 
-export default function Overview(props) {
+/**
+ * Gets application data from DBCaller to set user state and pass to OverviewView
+ * @returns {Element}
+ * @constructor
+ */
+export default function Overview() {
     const sortOptions = ["First name", "Surname", "Application status"]
     const [applicationsObject, setApplicationsObject] = useState(null);
     async function getApplications() {
         if(!applicationsObject) {
             try {
-                const response = await fetchApplications();
+                const response = await fetchApplicants();
                 await setApplicationsObject(response);
-                console.log("presenter:", response)
             } catch(e) {
                 console.log('Error in presenter fetching data')
             }

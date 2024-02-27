@@ -200,8 +200,12 @@ async function setAvailability(data){
   }
 }
 
-async function fetchApplications() {
-  const URL = 'http://localhost:8000/fetchapplications';
+/**
+ * Calls api to fetch names and status of applicants names from
+ * @returns {Promise<number|JSX.Element|any>}
+ */
+async function fetchApplicants() {
+  const URL = 'http://localhost:8000/fetchapplicants';
   //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
   try {
     const response = await fetch(URL, {
@@ -255,4 +259,4 @@ async function saveApplicationData(data){
   }
 }*/
 
-export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability, fetchApplications}
+export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability, fetchApplicants}

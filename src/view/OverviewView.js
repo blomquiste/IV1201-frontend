@@ -1,12 +1,18 @@
 import '../styling/forms.css'
-import React, {useEffect, useState} from "react";
-import getApplications from "../presenter/OverviewPresenter";
+import React from "react";
 
+/**
+ * Renders applicant data fetched from OverviewPresenter
+ * @param props
+ * @returns {Element}
+ * @constructor
+ */
 function OverviewView(props) {
     function sortHandlerACB(e) {props.onSort(e.target.value)}
     function renderSortACB(i) {return <option key={i} value={i}>{i}</option>}
 
-    function renderApplicationsACB(applicant) {
+    function renderApplicationsACB(applications) {
+        let applicant = applications.row_to_json;
         function detailHandlerACB(application, index) {
             props.onApplication(application.person_id)
             window.location.hash="#/details"
@@ -18,16 +24,16 @@ function OverviewView(props) {
             if(status === 3) return "Rejected";
         }
         return (
-            <tr className={"userDataContainer"} key={applicant.row_to_json.person_id} onClick={detailHandlerACB}>
-                <td>{applicant.row_to_json.name + " "} </td>
-                <td>{applicant.row_to_json.surname + " "}</td>
-                <td>{statusHandlerACB(applicant.row_to_json.status_id)}</td>
+            <tr className={"userDataContainer"} key={applicant.person_id} onClick={detailHandlerACB}>
+                <td>{applicant.name + " "} </td>
+                <td>{applicant.surname + " "}</td>
+                <td>{statusHandlerACB(applicant.status_id)}</td>
             </tr>
         )
     }
 
     return (
-        <div onLoad={props.loadApplications}>
+        <div>
             <h2>Applications</h2>
             <select onChange={sortHandlerACB}>
                 <option value={props.sortOptions || ""}>Sort</option>
@@ -37,9 +43,7 @@ function OverviewView(props) {
             <table>
                 <thead>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Application Status</th>
+                        {props.sortOptions.map(option => <th key={option}>{option}</th>)}
                     </tr>
                     </thead>
                     <tbody>
