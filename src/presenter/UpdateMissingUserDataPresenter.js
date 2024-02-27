@@ -48,7 +48,6 @@ export default function MissingUserDataUpdate(props){
     setUserEmail(email.email)
     console.log(JSON.stringify(email))
     const result = await restoreAccountByEmail(email)
-    console.log("updatemissinguserdatapresenter")
     console.log(result)
     console.log(result.emailSent)
     if(result === 404){

@@ -4,11 +4,30 @@
  * @returns a user json object on a succesful authentication, 
  * otherwise returns an int with the http error status.
  */
-
-//const URL = 'https://archdes-abbcfaefce39.herokuapp.com/';
 async function Authenticate(usernameAndPassword){
   const URL = 'login';
   return await callAPI(URL, usernameAndPassword)
+}
+async function logout(){
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
+  try {
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode:'cors'
+    });
+    console.log(response)
+    if (response.ok){
+      console.log("Logged out successful");
+    }else{
+      console.error('Failed to logout');
+    }
+  } catch (e) {
+    console.error('Error during logout:', e);
+  }
 }
 /**
  * Calls the API to check if account with this email exists and if it is missing username and password.
@@ -151,7 +170,8 @@ async function fetchTable() {
   }
 }
 async function setCompetence(data){
-  const URL = 'http://localhost:8000/competence';
+  //const URL = 'http://localhost:8000/competence';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -178,7 +198,8 @@ async function setCompetence(data){
  * @returns {Promise<void>}
  */
 async function setAvailability(data){
-  const URL = 'http://localhost:8000/availability';
+  //const URL = 'http://localhost:8000/availability';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -200,35 +221,6 @@ async function setAvailability(data){
   }
 }
 
-/**
- *
- * @param data
- * @returns {Promise<boolean>}
- *
-async function saveApplicationData(data){
-  const URL = 'http://localhost:8000/application';
-  try {
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-      mode:'cors'
-    });
-    // Check for both 200 and 201 status codes
-    if (response.status === 200 || response.status === 201) {
-      console.log("Registration successful")
-      return true;
-    }
-    if (!response.ok) {
-      throw new Error('Failed to save registration data');
-    }
-  } catch (error) {
-    console.error('Error saving registration data:', error);
-    return false;
-  }
-}*/
 
-export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability}
+
+export {Authenticate, logout, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability}

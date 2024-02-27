@@ -11,6 +11,13 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
         updatedAvailabilityChoices.splice(index, 1);
         setAvailabilityChoices(updatedAvailabilityChoices);
     };
+    async function validateFormAndProceed(handleSave, availabilityChoices) {
+        if (availabilityChoices.length!==0) {
+            handleSave(availabilityChoices);
+        } else {
+            console.log("Form has validation errors. Cannot proceed.");
+        }
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -20,12 +27,11 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
         onSubmit: async (values)=>{
             setAvailabilityChoices([...availabilityChoices, values]);
             formik.resetForm();
-            console.log(values);
         },
         validate: values => {
             let errors = {}
-            if(!values.start){errors.start = "Required"}
-            if(!values.end){errors.end = "Required"}
+            if(values.start.length===0){errors.start = "Required"}
+            if(values.end.length===0){errors.end = "Required"}
             return errors;
         }
     })
@@ -65,7 +71,7 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
                         ))}
                     </ul>
                 </div>
-                <button onClick={() => {if(formik.isValid){handleAvailabilitySave(availabilityChoices)}}}>Next</button>
+                <button onClick={()=>validateFormAndProceed(handleAvailabilitySave, availabilityChoices)}>Next</button>
             </div>
         </div>
     )

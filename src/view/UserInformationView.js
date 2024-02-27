@@ -2,7 +2,7 @@ import React from "react";
 import '../styling/forms.css';
 import {useFormik} from "formik";
 
-export default function UserCardView({user, handleSave, showNext}) {
+export default function UserInformationView({user, handleSave, showNext}) {
     async function storeUserData(values){
         try {
             const data = {...values, person_id: user.person_id}

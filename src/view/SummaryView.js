@@ -1,15 +1,18 @@
 export default SummaryView;
 
-function SummaryView({formData, sendApplication, showNext}) {
-    console.log("to be submitted (SummaryView): ", formData)
+function SummaryView({formData, sendApplication, resetFormAndComponent}) {
 
     async function onSend(){
         try {
+            console.log("to be submitted (SummaryView, onSend()): ", formData)
             await sendApplication(formData);
             console.log("Application sent successfully: ", formData);
         } catch (e){
             console.error(e);
         }
+    }
+    async function onCancel(){
+        await resetFormAndComponent();
     }
 
     return (
@@ -18,7 +21,7 @@ function SummaryView({formData, sendApplication, showNext}) {
             <ul>
                 {formData.competences.map((competence, index) => (
                     <p key={index}>
-                        {competence.expertise}, {competence.yearOfExperience} experience
+                        {competence.expertise}, {competence.yearsOfExperience} months experience
                     </p>
                 ))}
             </ul>
@@ -31,7 +34,7 @@ function SummaryView({formData, sendApplication, showNext}) {
                 ))}
             </ul>
             <p>If everything looks in order, feel free to submit</p>
-            <button type={"submit"} onClick={() => onSend}>Submit application</button><button className={"cancel"} onClick={showNext}>Cancel</button>
+            <button type={"submit"} onClick={() => onSend()}>Submit application</button><button className={"cancel"} onClick={onCancel}>Cancel</button>
         </div>
     )
 }
