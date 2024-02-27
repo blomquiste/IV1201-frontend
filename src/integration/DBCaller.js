@@ -53,8 +53,7 @@ async function callAPI(url, data){
       ,{mode:'cors'},);
     if(response.status !== 200)
       return response.status;
-    const result = await response.json()
-    return result;
+    return await response.json();
   }catch(e) {
     console.log(e);
   }

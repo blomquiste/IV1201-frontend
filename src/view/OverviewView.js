@@ -13,7 +13,7 @@ function OverviewView(props) {
 
     function renderApplicationsACB(applications) {
         let applicant = applications.row_to_json;
-        function detailHandlerACB(application, index) {
+        function detailHandlerACB(application) {
             props.onApplication(application.person_id)
             window.location.hash="#/details"
         }
