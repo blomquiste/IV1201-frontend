@@ -212,15 +212,15 @@ async function fetchApplications() {
       },
       mode: 'cors'
     });
-    console.log(response)
+    if (!response.status) return <div>Loading</div>
     if (!response.ok) {
       return response.status;
     }
     const data = await response.json();
-    console.log("DBCaller: ", data)
+    //console.log("DBCaller: ", data)
     return data;
   } catch (e) {
-    console.error(e);
+    console.error('Error fetching data', e);
   }
 }
 
