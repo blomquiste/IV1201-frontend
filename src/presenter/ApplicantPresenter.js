@@ -4,6 +4,7 @@ import CompetenceView from "../view/CompetenceView"
 import AvailabilityView from "../view/AvailabilityView"
 import SummaryView from "../view/SummaryView"
 import {fetchTable, saveUpdatedData, setAvailability, setCompetence} from '../integration/DBCaller'
+import Error from "../view/ErrorView";
 
 /**
  * The interface for an authenticated user with role_id 2. The user can submit an application from here
@@ -15,6 +16,7 @@ export default function Applicant({ user, handleLogout }) {
     const [updated, setUpdated] = useState(false);
     const [activeComponent, setActiveComponent] = useState(1);
     const [applicationSubmitted, setApplicationSubmitted] = useState(false);
+    const[error, setError] = useState(false);
     useEffect(() => {
         const storedActiveComponent = sessionStorage.getItem('activeComponent');
         if (storedActiveComponent !== null && storedActiveComponent !== undefined) {
@@ -66,12 +68,14 @@ export default function Applicant({ user, handleLogout }) {
         fetchCompetenceAreas();
     }, []);
     async function fetchCompetenceAreas() {
-        try {
-            const response = await fetchTable();
-            setCompetenceObject(response);
-        } catch(e){
-            console.error(e);
-        }
+        if(!competenceObject){
+            try {
+                const response = await fetchTable();
+                await setCompetenceObject(response);
+            } catch(e){
+                console.error(e);
+                setError(true);
+            }}
     }
     /**
      * Stores the form data between views, also appends to existing array of data
@@ -176,9 +180,11 @@ export default function Applicant({ user, handleLogout }) {
     }
 
     return (<div>
-        {activeComponent===1 && <UserInformationView user={user} handleSave={updateData} showNext={showNext}/>}
-        {activeComponent===2 && <CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} showNext={showNext}/>}
-        {activeComponent===3 && <AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext}/>}
-        {activeComponent===4 && <SummaryView user={user} formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} />}
+        <NavigationBar user={user} handleLogout={handleLogout}/>
+        {activeComponent===1 && !error && <UserInformationView user={user} handleSave={updateData} showNext={showNext}/>}
+        {activeComponent===2 && !error &&<CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} fetchCompetenceAreas={fetchCompetenceAreas} showNext={showNext}/>}
+        {activeComponent===3 && !error &&<AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext}/>}
+        {activeComponent===4 && !error &&<SummaryView formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} />}
+        {error && <Error/>}
     </div>);
 }

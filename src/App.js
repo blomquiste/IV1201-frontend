@@ -35,7 +35,7 @@ function App() {
 
     const [error, setError] = useState(false);
     const [registered, setRegistered] = useState(false);
-
+    //const navigate = useNavigate();
     useEffect(() => {
     // Check sessionStorage on page load
     const user = sessionStorage.getItem('user');
@@ -54,8 +54,9 @@ function App() {
    * 
    */
   async function handleLogin(user){
-    const response = await Authenticate(user);
+    let response; 
     try{
+      response = await Authenticate(user);
       if(response === 404)
         setFailedLogin(true)
       else if(response === 500){
@@ -72,6 +73,8 @@ function App() {
     }catch(e){
       console.error(`error in callDB: ${e}`)
       setError(true)
+      //navigate('/error');
+      //window.location.href='/error';
     }
   }
     /**
@@ -107,12 +110,12 @@ function App() {
         <Router>
             {loggedIn && <NavigationBar/>}
             <Routes>
-                <Route path="/" element={!error && <Login
+                <Route path="/" element={!error? <Login
                        handleLogin = {handleLogin}
                        failedLogin = {failedLogin}
                        user = {userObject}
                        loggedIn={loggedIn}
-                       recruiter={recruiter}/>}/>
+                       recruiter={recruiter}/>:<Error/>}/>
                 <Route path="/register" element={!error && <Registration
                        handleRegistration={handleRegistration}
                        registered={registered}/>}/>
@@ -126,7 +129,8 @@ function App() {
                 <Route path="/error" element={error && <Error/>}  />
             </Routes>
         </Router>
-      <div>{error && <Error/>}</div>
+      
     </div>)
 }
 export default App;
+//<div>{error && <Error/>}</div>

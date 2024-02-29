@@ -79,6 +79,7 @@ async function callAPI(url, data){
     return await response.json();
   }catch(e) {
     console.log(e);
+    throw new Error();
   }
 }
 
@@ -167,6 +168,7 @@ async function fetchTable() {
     }
   } catch (e) {
     console.error(e);
+    throw new Error();
   }
 }
 
