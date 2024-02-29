@@ -59,6 +59,7 @@ export default function Applicant({ user, handleLogout }) {
             }
         }catch (e){
             console.error("Error saving user information: ", e);
+            setError(true)
         }
     }
     /**
@@ -166,6 +167,7 @@ export default function Applicant({ user, handleLogout }) {
             return responses.every(response => response !== null);
         } catch (e) {
             console.error("Error sending competences:", e);
+            setError(true);
         }
     }
 

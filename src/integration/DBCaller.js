@@ -141,6 +141,7 @@ async function saveUpdatedData(data){
     }
   }catch(e){
     console.error(e);
+    throw new Error();
   }
 }
 
@@ -199,6 +200,7 @@ async function setCompetence(competenceData){
     }
   }catch(e){
     console.error(e);
+    throw new Error();
   }
 }
 /**
