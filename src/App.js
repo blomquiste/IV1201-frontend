@@ -3,15 +3,13 @@ import Login from "./presenter/LoginPresenter"
 import Registration from "./presenter/RegistrationPresenter";
 import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
+import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
-import Overview from "./presenter/OverviewPresenter"
-
-import {
+import Overview from "./presenter/OverviewPresenter" import {
     Authenticate,
     saveRegistrationData,
     restoreAccountByEmail,
-    setCompetence,
-    setAvailability,
+    logout,
 } from './integration/DBCaller'
 import React, { useState, useEffect } from "react";
 import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
@@ -24,8 +22,8 @@ import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-
  * When the application refreshes, check if the user information exists in sessionStorage
  * 
  @returns LoginPresenter - handles logic for login and calls the relevant views
- *        RegistrationPresenter - handles logic for registration and calls the relevant views.
- *        ErrorView - shows simple error message on server error during api calls.
+ * RegistrationPresenter - handles logic for registration and calls the relevant views.
+ * ErrorView - shows simple error message on server error during api calls.
  */
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -34,7 +32,6 @@ function App() {
 
     const[error, setError] = useState(false);
     const [registered, setRegistered] = useState(false);
-    const [applicationSubmitted, setApplicationSubmitted] = useState(false);
 
     useEffect(() => {
     // Check sessionStorage on page load
@@ -53,7 +50,7 @@ function App() {
    * @param {Object} user takes argument on the form of: {username: 'username', password:'pw'}
    * 
    */
-  async function callDB(user){
+  async function handleLogin(user){
     const response = await Authenticate(user);
     try{
       if(response === 404)
@@ -62,19 +59,33 @@ function App() {
         throw new Error("500 http code from server")
       }
       else{
-        console.log("loginpresenter")
-        console.log(response)
+        console.error(response)
         setFailedLogin(false)
         setUserObject(response)
         setLoggedIn(true)
         sessionStorage.setItem('user', JSON.stringify(response));
       }
     }catch(e){
-      console.log("response in callDB: " + response)
-      console.log(`error in callDB: ${e}`)
+      console.error(`error in callDB: ${e}`)
       setError(true)
     }
   }
+
+    /**
+     * Sign out functionality
+     * Calls the DBCaller function logout()
+     */
+    async function handleLogout() {
+        try {
+            sessionStorage.removeItem('user');
+            setLoggedIn(false);
+            setUserObject(null);
+            await logout();
+        } catch (e) {
+            console.error('Error during logout:', e);
+        }
+    }
+
     /**
      * Function that calls the backend api,
      * sets 'registered' boolean state to true on a successful api call.
@@ -84,7 +95,6 @@ function App() {
         try {
             const response = await saveRegistrationData(fieldValues);
             if (response) {
-                console.log('User registered successfully');
                 setRegistered(true);
             } else {
                 console.error('Registration failed:', response.statusText);
@@ -95,77 +105,38 @@ function App() {
             setRegistered(false);
         }
     }
-
     /**
      *
      * @param email
      * @returns {Promise<void>}
      */
   async function updateUserData(email){
-    console.log("jsoning email")
-    console.log(JSON.stringify(email))
+    console.log("jsoning email", JSON.stringify(email))
     restoreAccountByEmail(email)
-  }
-
-    async function sendApplication(data){
-        try {
-            const { competences, availabilities } = data;
-            console.log(competences);
-            console.log(availabilities);
-            await sendCompetence(competences);
-            await sendAvailability(availabilities);
-            setApplicationSubmitted(true);
-            console.log("Application sent successfully");
-        } catch (error) {
-            console.error("Error submitting application:", error);
-            setApplicationSubmitted(false);
-        }
-    }
-    async function sendCompetence(data){
-        console.log(data);
-        try {
-            await Promise.all(data.map(setCompetence));
-            console.log("Competences sent successfully");
-        } catch (e) {
-            console.error("Error sending competences:", e);
-        }
-    }
-
-    /**
-     * Sends the users application by calling 'saveApplicationData' in the DBCaller
-     * @param data
-     * @returns {Promise<void>}
-     */
-  async function sendAvailability(data){
-        console.log(data);
-        try {
-            await Promise.all(data.map(setAvailability));
-            console.log("Availabilities sent successfully");
-        }catch(e){
-            console.error("Error sending availabilities:", e);
-        }
   }
 
   return (<div className={"App"}>
         <Router>
             <Routes>
                 <Route path="/" element={!error && <Login
-                      callDB = {callDB}
-                      failedLogin = {failedLogin}
-                      user = {userObject}
-                      loggedIn={loggedIn}/>}/>
+                       handleLogin = {handleLogin}
+                       failedLogin = {failedLogin}
+                       user = {userObject}
+                       loggedIn={loggedIn}/>}/>
                 <Route path="/register" element={!error && <Registration
-                        handleRegistration={handleRegistration}
-                        registered={registered}/>}/>
+                       handleRegistration={handleRegistration}
+                       registered={registered}/>}/>
                 <Route path="/updateUser" element = {!error && <MissingUserDataUpdate 
-                  updateUserData = {updateUserData}/>}/>
+                       updateUserData = {updateUserData}/>}/>
                 <Route path="/register" element={!error && <Registration/>}/>
+                <Route path="/user" element={loggedIn ? <User
+                       user = {userObject}
+                       handleLogout={handleLogout}/> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
                         user = {userObject}
                         sendApplication={sendApplication} /> : <Error/>} />
                 <Route path="/overview" element={!error && <Overview/>}/>
                 <Route path="/error" element={error && <Error/>}  />
-
             </Routes>
         </Router>
       <div>{error && <Error/>}</div>

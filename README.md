@@ -48,7 +48,7 @@ IV1201-frontend
 │   │   ├── OverviweView.js
 │   │   ├── RegistrationView.js
 │   │   ├── SummaryView.js
-│   │   ├── UserCardView.js
+│   │   ├── UserInformationView.js
 │   │   └── UserView.js
 │   ├── App.css
 │   ├── App.js - acts as the head controller

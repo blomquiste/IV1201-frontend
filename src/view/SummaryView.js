@@ -1,15 +1,27 @@
+import {useNavigate} from "react-router-dom";
+import {useState} from "react";
+
 export default SummaryView;
 
-function SummaryView({formData, sendApplication, showNext}) {
-    console.log("to be submitted (SummaryView): ", formData)
+function SummaryView({user, formData, sendApplication, resetFormAndComponent}) {
+    const navigate = useNavigate();
+    const [submitted, setSubmitted] = useState(false);
 
     async function onSend(){
+        const data = {...formData, person_id: user.person_id}
         try {
-            await sendApplication(formData);
-            console.log("Application sent successfully: ", formData);
+            const response = await sendApplication(data);
+            console.log(response);
+            if(response) {
+                console.log("Application sent successfully: ", data, response);
+                navigate('/user');
+            }
         } catch (e){
             console.error(e);
         }
+    }
+    async function onCancel(){
+        await resetFormAndComponent();
     }
 
     return (
@@ -18,7 +30,7 @@ function SummaryView({formData, sendApplication, showNext}) {
             <ul>
                 {formData.competences.map((competence, index) => (
                     <p key={index}>
-                        {competence.expertise}, {competence.yearOfExperience} experience
+                        {competence.expertise}, {competence.yearsOfExperience} months experience
                     </p>
                 ))}
             </ul>
@@ -26,12 +38,12 @@ function SummaryView({formData, sendApplication, showNext}) {
             <ul>
                 {formData.availabilities.map((availability, index) => (
                     <p key={index}>
-                        {availability.start} - {availability.end}
+                        {availability.from_date} - {availability.to_date}
                     </p>
                 ))}
             </ul>
             <p>If everything looks in order, feel free to submit</p>
-            <button type={"submit"} onClick={() => onSend}>Submit application</button><button className={"cancel"} onClick={showNext}>Cancel</button>
+            <button type={"submit"} onClick={() => onSend()}>Submit application</button><button className={"cancel"} onClick={onCancel}>Cancel</button>
         </div>
     )
 }

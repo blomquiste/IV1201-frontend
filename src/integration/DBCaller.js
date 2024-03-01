@@ -4,11 +4,31 @@
  * @returns a user json object on a succesful authentication, 
  * otherwise returns an int with the http error status.
  */
-
-//const URL = 'https://archdes-abbcfaefce39.herokuapp.com/';
 async function Authenticate(usernameAndPassword){
   const URL = 'login';
   return await callAPI(URL, usernameAndPassword)
+}
+async function logout(){
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
+  const URL = 'http://localhost:8000/logout'
+  try {
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode:'cors'
+    });
+    console.log(response)
+    if (response.ok){
+      console.log("Logged out successful");
+    }else{
+      console.error('Failed to logout');
+    }
+  } catch (e) {
+    console.error('Error during logout:', e);
+  }
 }
 /**
  * Calls the API to check if account with this email exists and if it is missing username and password.
@@ -40,8 +60,8 @@ async function updateAccountByEmail(userdata){
  * @returns HTTP responseif response status is 200, otherwise returns response status code.
  */
 async function callAPI(url, data){
-  //const URL = 'http://localhost:8000';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+  const URL = 'http://localhost:8000/';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
   try{
     const response = await fetch(URL + url, 
       {method: 'POST',
@@ -60,15 +80,13 @@ async function callAPI(url, data){
 }
 
 /**
- * Calls backend api to register a new user.
+ * Calls backend api to register a new user by making a POST request
  * @param userdata takes the user data as a single object
  * @returns {Promise<boolean>} True if response status is 200 or 201
  */
 async function saveRegistrationData(userdata) {
-  //const URL = 'http://localhost:8000/registration';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/registration'
+  const URL = 'http://localhost:8000/registration'
   try {
-    // Make a POST request to the backend API endpoint for saving registration data
     const response = await fetch(URL, {
       method: 'POST',
       headers: {
@@ -79,11 +97,10 @@ async function saveRegistrationData(userdata) {
       mode:'cors'
     });
     // Check for both 200 and 201 status codes
-    if (response.status === 200 || response.status === 201) {
-      console.log("Registration successful")
+    if (response.ok) {
       return true;
     }
-    if (!response.ok) {
+    else{
       throw new Error('Failed to save registration data');
     }
   } catch (error) {
@@ -98,8 +115,8 @@ async function saveRegistrationData(userdata) {
  * @returns {Promise<boolean>}
  */
 async function saveUpdatedData(data){
-  //const URL = 'http://localhost:8000/update';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/update'
+  const URL = 'http://localhost:8000/update';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/update'
   try {
     const response = await fetch(URL,{
     method: 'POST',
@@ -127,8 +144,8 @@ async function saveUpdatedData(data){
  * @returns {Promise<number|any>}
  */
 async function fetchTable() {
-  //const URL = 'http://localhost:8000/fetch';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
+  const URL = 'http://localhost:8000/fetch';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
   try {
     const response = await fetch(URL, {
       method: 'GET',
@@ -138,19 +155,25 @@ async function fetchTable() {
       },
       mode: 'cors'
     });
-    console.log(response)
-    if (!response.ok) {
-      return response.status;
+    if (response.ok) {
+      return await response.json();
+    }else{
+      console.error('Error:', response.status);
+      return null;
     }
-    const data = await response.json();
-    console.log("DBCaller: ", data)
-    return data;
   } catch (e) {
     console.error(e);
   }
 }
-async function setCompetence(data){
-  const URL = 'http://localhost:8000/competence';
+
+/**
+ * Calls the endpoint api that sets the rows contents from the table 'competence_profile'
+ * @param competenceData
+ * @returns {Promise<number>}
+ */
+async function setCompetence(competenceData){
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
+  const URL = 'http://localhost:8000/setCompetence';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -158,14 +181,15 @@ async function setCompetence(data){
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(competenceData),
       mode:'cors'
     });
-    if (response.status === 201) {
+    if (response.ok) {
       console.log("Competence added.")
+      return true;
     }
-    if (!response.ok) {
-      return response.status;
+    else {
+      return false;
     }
   }catch(e){
     console.error(e);
@@ -173,11 +197,12 @@ async function setCompetence(data){
 }
 /**
  * Calls the api that sets the rows contents from the table 'availability'
- * @param data
+ * @param availabilityData
  * @returns {Promise<void>}
  */
-async function setAvailability(data){
-  const URL = 'http://localhost:8000/availability';
+async function setAvailability(availabilityData){
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
+  const URL = 'http://localhost:8000/setAvailability';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -185,14 +210,15 @@ async function setAvailability(data){
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(availabilityData),
       mode:'cors'
     });
-    if (response.status === 201) {
+    if (response.ok) {
       console.log("Availability added.")
+      return true;
     }
-    if (!response.ok) {
-      return response.status;
+    else {
+      return false;
     }
   }catch(e){
     console.error(e);
@@ -225,35 +251,50 @@ async function fetchApplicants() {
   }
 }
 
-/**
- *
- * @param data
- * @returns {Promise<boolean>}
- *
-async function saveApplicationData(data){
-  const URL = 'http://localhost:8000/application';
+async function getCompetences(person_id){
+  const URL = `http://localhost:8000/getCompetences/${person_id}`;
   try {
-    const response = await fetch(URL, {
-      method: 'POST',
+    const response = await fetch(URL,{
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data),
       mode:'cors'
     });
-    // Check for both 200 and 201 status codes
-    if (response.status === 200 || response.status === 201) {
-      console.log("Registration successful")
-      return true;
+    if (response.ok) {
+      return await response.json();
+    }else{
+      console.error('Error:', response.status);
+      return null;
     }
-    if (!response.ok) {
-      throw new Error('Failed to save registration data');
-    }
-  } catch (error) {
-    console.error('Error saving registration data:', error);
-    return false;
+  }catch (e) {
+    console.error(e)
   }
-}*/
+}
+async function getAvailabilities(person_id){
+  const URL = `http://localhost:8000/getAvailabilities/${person_id}`;
+  try {
+    const response = await fetch(URL,{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode:'cors'
+    });
+    if (response.ok) {
+      return await response.json();
+    }else{
+      console.error('Error:', response.status);
+      return null;
+    }
+  }catch (e) {
+    console.error(e)
+  }
+}
 
-export {Authenticate, restoreAccountByEmail, saveRegistrationData, updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence, setAvailability, fetchApplicants}
+
+export {Authenticate, logout, restoreAccountByEmail, saveRegistrationData,
+        updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence,
+        setAvailability, fetchApplicants, getCompetences, getAvailabilities}

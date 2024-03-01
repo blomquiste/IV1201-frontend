@@ -4,7 +4,17 @@ import {useFormik, Field} from 'formik'
 import '../styling/forms.css'
 import '../styling/application.css'
 
-export default function CompetenceView({ fetchCompetenceAreas, competences, handleCompetenceSave, showNext }) {
+/**
+ * CompetenceView renders the user interface for inputting expertise and experience.
+ * Renders the competences from the 'competence' table and saves the input data to the final step of the application.
+ * The submit function validates the form, checks if the form is valid, finds the id for the particular competence chosen,
+ * checks if the competence is already selected by the user and if not appends the chosen competences to the form values selected.
+ *
+ * @param competences The values retrieved from the database
+ * @param handleCompetenceSave function to persist the form data upon route change
+ * @returns {Element}
+ */
+export default function CompetenceView({ competences, handleCompetenceSave }) {
     const [competenceChoices, setCompetenceChoices] = useState([]);
 
     const handleRemoveCompetence = (index) => {
@@ -14,21 +24,46 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
         setCompetenceChoices(updatedCompetenceChoices);
     };
 
+    async function validateFormAndProceed(handleSave, competenceChoices) {
+        if (competenceChoices.length!==0) {
+            handleSave(competenceChoices);
+        } else {
+            console.log("Form has validation errors. Cannot proceed.");
+        }
+    }
+
     const formik = useFormik({
         initialValues: {
+            competence_id: null,
             expertise: [],
-            yearsOfExperience: [],
+            monthsOfExperience: [],
         },
-        onSubmit: async (values)=>{
-            if (values.expertise && values.yearsOfExperience ){
-                setCompetenceChoices([...competenceChoices, values]);
+        onSubmit: async (values) => {
+            const err = await formik.validateForm();
+            if (Object.keys(err).length === 0) {
+                const selectedCompetence = competences.find(competence => competence.name === values.expertise);
+                const exists = competenceChoices.some(choice => choice.expertise === values.expertise);
+                if (!exists) {
+                    setCompetenceChoices([...competenceChoices,
+                        {   competence_id: selectedCompetence.competence_id,
+                            expertise: values.expertise,
+                            monthsOfExperience: values.monthsOfExperience }]);
+                    await formik.resetForm();
+                } else {
+                    console.log("This competence already exists in the list.");
+                }
+            } else {
+                console.log("Form has validation errors. Cannot submit.");
             }
-            await formik.resetForm();
         },
         validate: values => {
             let errors = {}
-            if(!values.expertise){errors.expertise = "Required"}
-            if(!values.yearsOfExperience){errors.yearsOfExperience = "Required" }
+            if (values.expertise.length === 0) {
+                errors.expertise = "Required"
+            }
+            if (values.monthsOfExperience.length === 0) {
+                errors.monthsOfExperience = "Required"
+            }
             return errors
         }
     })
@@ -43,17 +78,15 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
                             id={"expertise"}
                             name={"expertise"}
                             onChange={formik.handleChange}
-                            value={Array.isArray(formik.values.expertise) ? formik.values.expertise[0] : formik.values.expertise}
-                            onClick={fetchCompetenceAreas}>
+                            value={formik.values.expertise} >
                             <option value="" label="Select area of expertise"></option>
-                            {/* Render a disabled option with loading message while competences are being fetched */}
                             {!competences ? (
                                 <option disabled>Loading competences...</option>) : (
                                 <>
                                     {/* Render options from the competences state */}
                                     {competences.map((competence) => (
                                         <option key={competence.name}
-                                                value={competence.id}>
+                                                value={competence.name}>
                                             {competence.name}
                                         </option>
                                     ))}
@@ -64,17 +97,17 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
                             <div className={"error-message"}>{formik.errors.expertise}</div> : null}
                     </div>
                     <div className={"inputGroup"}>
-                        <label htmlFor={"yearsOfExperience"}>Experience within the field</label>
-                        <input  type={"number"}
-                                id={"yearsOfExperience"}
-                                name={"yearsOfExperience"}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={Array.isArray(formik.values.yearsOfExperience) ? formik.values.yearsOfExperience[0] : formik.values.yearsOfExperience}
-                                placeholder={"months"}>
+                        <label htmlFor={"monthsOfExperience"}>Experience within the field</label>
+                        <input type={"number"}
+                               id={"monthsOfExperience"}
+                               name={"monthsOfExperience"}
+                               onChange={formik.handleChange}
+                               onBlur={formik.handleBlur}
+                               value={formik.values.monthsOfExperience}
+                               placeholder={"months"}>
                         </input>
-                        {formik.errors.yearsOfExperience ?
-                        <div className={"error-message"}>{formik.errors.yearsOfExperience}</div> : null}
+                        {formik.errors.monthsOfExperience ?
+                            <div className={"error-message"}>{formik.errors.monthsOfExperience}</div> : null}
                     </div>
                     <button type={"submit"} className={"add"}>Add</button>
                 </form>
@@ -84,15 +117,14 @@ export default function CompetenceView({ fetchCompetenceAreas, competences, hand
                         {/* Render all choices */}
                         {competenceChoices.map((choice, index) => (
                             <li key={index}>
-                                {choice.expertise}, {choice.yearsOfExperience} months <button className={"remove"}
-                                                                                             onClick={() => handleRemoveCompetence(index)}>Remove</button>
+                                {choice.expertise}, {choice.monthsOfExperience} months <button className={"remove"}
+                                                                                              onClick={() => handleRemoveCompetence(index)}>Remove</button>
                             </li>
                         ))}
                     </ul>
                 </div>
             </div>
-            <button onClick={() => {if(formik.isValid) { handleCompetenceSave(competenceChoices) }}
-            }>Next</button>
+            <button onClick={()=>validateFormAndProceed(handleCompetenceSave, competenceChoices)}>Next</button>
         </div>
     )
 }
