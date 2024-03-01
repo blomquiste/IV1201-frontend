@@ -5,5 +5,5 @@ import {Link} from 'react-router-dom';
  * @returns 
  */
 export default function AccountUpdatedByEmailView(){
-  return <p>Account data was successfully updated. Return to starting page to login <Link to={"/login"}>Login here</Link></p>
+  return <p>Account data was successfully updated. Return to starting page to login <Link to={"/"}>Login here</Link></p>
 }
