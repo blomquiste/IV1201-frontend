@@ -1,7 +1,8 @@
+import React, { useState} from "react";
 import LoginView from "../view/LoginView";
 import FailedLoginView from "../view/FailedLoginView"
-import React, { useState} from "react";
-import Applicant from "./ApplicantPresenter";
+import User from "./UserPresenter";
+import NavigationBar from "../components/NavigationBar"
 
 /**
  * Handles logic for login-related views
@@ -15,8 +16,9 @@ import Applicant from "./ApplicantPresenter";
  */
 export default function Login(props) {
     return (<>
+            <NavigationBar/>
         <div>{!props.loggedIn && !props.failedLogin && <LoginView onLogin={props.handleLogin}/>}</div>
-        <div>{props.loggedIn && <Applicant user={props.user}/>}</div>
+        <div>{props.loggedIn && <User user={props.user}/>}</div>
         <div>{props.failedLogin && <FailedLoginView onLogin={props.handleLogin}/>}</div>
     </>
     )

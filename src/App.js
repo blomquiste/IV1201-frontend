@@ -5,13 +5,11 @@ import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
-
 import {
     Authenticate,
     saveRegistrationData,
     restoreAccountByEmail,
-    setCompetence,
-    setAvailability, logout,
+    logout,
 } from './integration/DBCaller'
 import React, { useState, useEffect } from "react";
 import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
@@ -97,7 +95,6 @@ function App() {
         try {
             const response = await saveRegistrationData(fieldValues);
             if (response) {
-                console.log('User registered successfully');
                 setRegistered(true);
             } else {
                 console.error('Registration failed:', response.statusText);
@@ -117,41 +114,6 @@ function App() {
     console.log("jsoning email", JSON.stringify(email))
     restoreAccountByEmail(email)
   }
-/*
-    async function sendApplication(data){
-        try {
-            const { competences, availabilities } = data;
-            console.log(competences);
-            console.log(availabilities);
-            await sendCompetence(competences);
-            await sendAvailability(availabilities);
-            setApplicationSubmitted(true);
-            console.log("Application sent successfully");
-        } catch (error) {
-            console.error("Error submitting application:", error);
-            setApplicationSubmitted(false);
-        }
-    }*/
-    /*
-    async function sendCompetence(data){
-        console.log(data);
-        try {
-            await Promise.all(data.map(setCompetence));
-            console.log("Competences sent successfully");
-        } catch (e) {
-            console.error("Error sending competences:", e);
-        }
-    }
-
-  async function sendAvailability(data){
-        console.log(data);
-        try {
-            await Promise.all(data.map(setAvailability));
-            console.log("Availabilities sent successfully");
-        }catch(e){
-            console.error("Error sending availabilities:", e);
-        }
-  }*/
 
   return (<div className={"App"}>
         <Router>
@@ -167,12 +129,12 @@ function App() {
                 <Route path="/updateUser" element = {!error && <MissingUserDataUpdate 
                        updateUserData = {updateUserData}/>}/>
                 <Route path="/register" element={!error && <Registration/>}/>
-                <Route path="/apply" element={loggedIn ? <Applicant
-                       handleLogout={handleLogout}
-                       user = {userObject} /> : <Error/>} />
                 <Route path="/user" element={loggedIn ? <User
                        user = {userObject}
                        handleLogout={handleLogout}/> : <Error/>} />
+                <Route path="/apply" element={loggedIn ? <Applicant
+                       handleLogout={handleLogout}
+                       user = {userObject} /> : <Error/>} />
                 <Route path="/error" element={error && <Error/>}  />
             </Routes>
         </Router>
