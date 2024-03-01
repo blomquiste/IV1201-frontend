@@ -63,18 +63,19 @@ export default function Applicant({ user, handleLogout }) {
     /**
      * Fetching rows from table competence in db,
      */
+    useEffect(() => {
+        fetchCompetenceAreas();
+    }, []);
     async function fetchCompetenceAreas() {
-        if(!competenceObject){
-            try {
-                const response = await fetchTable();
-                await setCompetenceObject(response);
-            } catch(e){
-                console.error(e);
-            }}
+        try {
+            const response = await fetchTable();
+            setCompetenceObject(response);
+        } catch(e){
+            console.error(e);
+        }
     }
     /**
      * Stores the form data between views, also appends to existing array of data
-     *
      * @param competenceData The areas of expertise and amount of experience input by the user
      */
     const handleCompetenceSave = (competenceData) => {
@@ -127,33 +128,49 @@ export default function Applicant({ user, handleLogout }) {
      */
     async function sendApplication(data){
         try {
-            const { competences, availabilities } = data;
-            console.log(competences);
-            console.log(availabilities);
-            await sendCompetence(competences);
-            await sendAvailability(availabilities);
-            setApplicationSubmitted(true);
-            console.log("Application sent successfully");
+            const { competences, availabilities, person_id } = data;
+
+            const competenceData = competences.map(({ competence_id, monthsOfExperience }) => ({
+                competence_id,
+                person_id,
+                monthsOfExperience
+            }));
+            const availabilityData = availabilities.map( ({ from_date, to_date })=> ({
+                person_id,
+                from_date,
+                to_date
+            }));
+            console.log("sendApplication: ", availabilityData);
+
+            const responseCompetence = await sendCompetence(competenceData);
+            const responseAvailability = await sendAvailability(availabilityData);
+            if (responseCompetence && responseAvailability) {
+                setApplicationSubmitted(true);
+                console.log("Application sent successfully");
+                return true;
+            }else{
+                console.log("Submitting application was unsuccessful");
+                return false;
+            }
         } catch (error) {
             console.error("Error submitting application:", error);
-            setApplicationSubmitted(false);
+            return false;
         }
     }
-    async function sendCompetence(data){
-        console.log(data);
+    async function sendCompetence(competences){
         try {
-            await Promise.all(data.map(setCompetence));
-            console.log("Competences sent successfully");
+            const responses = await Promise.all(competences.map(competence => setCompetence(competence)));
+            return responses.every(response => response !== null);
         } catch (e) {
             console.error("Error sending competences:", e);
         }
     }
 
-    async function sendAvailability(data){
-        console.log(data);
+    async function sendAvailability(availabilities){
         try {
-            await Promise.all(data.map(setAvailability));
-            console.log("Availabilities sent successfully");
+            console.log(availabilities);
+            const responses = await Promise.all(availabilities.map(availability => setAvailability(availability)));
+            return responses.every(response => response !== null);
         }catch(e){
             console.error("Error sending availabilities:", e);
         }
@@ -162,8 +179,8 @@ export default function Applicant({ user, handleLogout }) {
     return (<div>
         <NavigationBar user={user} handleLogout={handleLogout}/>
         {activeComponent===1 && <UserInformationView user={user} handleSave={updateData} showNext={showNext}/>}
-        {activeComponent===2 && <CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} fetchCompetenceAreas={fetchCompetenceAreas} showNext={showNext}/>}
+        {activeComponent===2 && <CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} showNext={showNext}/>}
         {activeComponent===3 && <AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext}/>}
-        {activeComponent===4 && <SummaryView formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} />}
+        {activeComponent===4 && <SummaryView user={user} formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} />}
     </div>);
 }

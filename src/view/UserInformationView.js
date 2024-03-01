@@ -51,7 +51,6 @@ export default function UserInformationView({user, handleSave, showNext}) {
                                 value={formik.values.name}
                                 onChange={formik.handleChange}/>
                             {formik.errors.name ? <div className={"error-message"}>{formik.errors.name}</div> : null}
-
                         </div>
                         <div className="inputGroup">
                             <label htmlFor="surname">Surname:</label>

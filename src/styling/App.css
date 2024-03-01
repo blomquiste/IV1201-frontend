@@ -50,3 +50,7 @@
   margin-left: auto; /* Move sign-out link to the right */
   margin-right: auto; /* Move my-page link to the left */
 }
+.success-message{
+  border: solid;
+  background-color: green;
+}
