@@ -5,7 +5,7 @@ import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
-import {
+import Overview from "./presenter/OverviewPresenter" import {
     Authenticate,
     saveRegistrationData,
     restoreAccountByEmail,
@@ -133,8 +133,9 @@ function App() {
                        user = {userObject}
                        handleLogout={handleLogout}/> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
-                       handleLogout={handleLogout}
-                       user = {userObject} /> : <Error/>} />
+                        user = {userObject}
+                        sendApplication={sendApplication} /> : <Error/>} />
+                <Route path="/overview" element={!error && <Overview/>}/>
                 <Route path="/error" element={error && <Error/>}  />
             </Routes>
         </Router>
