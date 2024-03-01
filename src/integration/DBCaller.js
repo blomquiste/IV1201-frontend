@@ -6,7 +6,10 @@
  */
 async function Authenticate(usernameAndPassword){
   const URL = 'login';
-  return await callAPI(URL, usernameAndPassword)
+  const response = await callAPI(URL, usernameAndPassword);
+  console.log(response.JWTToken)
+  document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure";
+  return response; 
 }
 /**
  * TODO: Log out functionality 
@@ -155,9 +158,11 @@ async function fetchTable() {
   try {
     const response = await fetch(URL, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'authCookie':sessionStorage.getItem('JWTToken'),
       },
       mode: 'cors'
     });

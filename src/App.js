@@ -63,7 +63,7 @@ function App() {
         throw new Error("500 http code from server")
       }
       else{
-        console.error("RESPONSE: ", response.role_id)
+        console.log("RESPONSE: ", response.role_id)
         setFailedLogin(false)
         setUserObject(response)
         setLoggedIn(true)

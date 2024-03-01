@@ -72,6 +72,9 @@ export default function Applicant({ user, handleLogout }) {
         if(!competenceObject){
             try {
                 const response = await fetchTable();
+                if(response==500){
+                    console.log("unauthprized")
+                    throw new Error('server unavailable')}
                 await setCompetenceObject(response);
             } catch(e){
                 console.error(e);
