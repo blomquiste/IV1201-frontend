@@ -1,5 +1,5 @@
 import React from "react";
-import '../styling/forms.css'
+import '../styling/application.css'
 export default function UserView({user, competenceArray, availabilityArray}){
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -13,28 +13,31 @@ export default function UserView({user, competenceArray, availabilityArray}){
 
     return (
         <div className={"mainContainer"}>
-            <h2>Your applications, {user.name}</h2>
-            <div className="applications-container">
-                <div className="competence-container">
-                    <h3>Competence</h3>
-                    {competenceArray.map((competence) => (
-                        <div key={competence.competence_id}>
-                            {formatCompetence(competence.competence_id)}
-                        </div>
-                    ))}
+            <h2> {user.name}s application</h2>
+            <div className={"applicationContainer"}>
+                {competenceArray.length === 0 && availabilityArray.length === 0 ? (
+                    <button>Go to application</button> ) : (
+                <div className="textContainer">
+                    <div className="competence-container">
+                        <h3>Competence</h3>
+                        {competenceArray.map((competence) => (
+                            <div key={competence.competence_id}>
+                                {formatCompetence(competence.competence_id)}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="availability-container">
+                        <h3>Availability</h3>
+                        {availabilityArray.map((availability) => (
+                            <div key={availability.availability_id}>
+                                {formatDate(availability.from_date)} to {formatDate(availability.to_date)}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="availability-container">
-                    <h3>Availability</h3>
-                    {availabilityArray.map((availability) => (
-                        <div key={availability.availability_id}>
-                            {formatDate(availability.from_date)} - {formatDate(availability.to_date)}
-                        </div>
-                    ))}
-                </div>
+                )}
+                <button /*TODO*/>Edit application</button>
             </div>
-            <button /*TODO*/>Edit application</button>
         </div>
-
-
     )
 }

@@ -5,6 +5,7 @@ import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
+import NavigationBar from "./components/NavigationBar";
 import {
     Authenticate,
     saveRegistrationData,
@@ -70,22 +71,6 @@ function App() {
       setError(true)
     }
   }
-
-    /**
-     * Sign out functionality
-     * Calls the DBCaller function logout()
-     */
-    async function handleLogout() {
-        try {
-            sessionStorage.removeItem('user');
-            setLoggedIn(false);
-            setUserObject(null);
-            await logout();
-        } catch (e) {
-            console.error('Error during logout:', e);
-        }
-    }
-
     /**
      * Function that calls the backend api,
      * sets 'registered' boolean state to true on a successful api call.
@@ -117,6 +102,7 @@ function App() {
 
   return (<div className={"App"}>
         <Router>
+            {loggedIn && <NavigationBar/>}
             <Routes>
                 <Route path="/" element={!error && <Login
                        handleLogin = {handleLogin}
@@ -130,10 +116,8 @@ function App() {
                        updateUserData = {updateUserData}/>}/>
                 <Route path="/register" element={!error && <Registration/>}/>
                 <Route path="/user" element={loggedIn ? <User
-                       user = {userObject}
-                       handleLogout={handleLogout}/> : <Error/>} />
+                       user = {userObject} /> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
-                       handleLogout={handleLogout}
                        user = {userObject} /> : <Error/>} />
                 <Route path="/error" element={error && <Error/>}  />
             </Routes>

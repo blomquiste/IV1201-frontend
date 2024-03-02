@@ -33,7 +33,7 @@ function FailedLoginView(props){
         <div className={"mainContainer"}>
             <h1>Welcome!</h1>
             <p>Please sign in before submitting an application</p>
-            <p>Bad username or password</p>
+            <p className={"error-message"}>Bad username or password</p>
             <form onSubmit={handleSubmit}>
                 <div className={"inputGroup"}>
                     <input type="username"

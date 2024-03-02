@@ -16,7 +16,6 @@ import NavigationBar from "../components/NavigationBar"
  */
 export default function Login(props) {
     return (<>
-            <NavigationBar/>
         <div>{!props.loggedIn && !props.failedLogin && <LoginView onLogin={props.handleLogin}/>}</div>
         <div>{props.loggedIn && <User user={props.user}/>}</div>
         <div>{props.failedLogin && <FailedLoginView onLogin={props.handleLogin}/>}</div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import NavigationBar from "../components/NavigationBar";
 import UserView from "../view/UserView";
-import {getCompetences, getAvailabilities, setAvailability} from "../integration/DBCaller";
+import {getCompetences, getAvailabilities} from "../integration/DBCaller";
 
 /**
  * Full view of job applications that the user can see
@@ -38,7 +37,6 @@ export default function User({user}) {
     }
 
     return (<div>
-        <NavigationBar/>
         <UserView user={user} competenceArray={competenceArray} availabilityArray={availabilityArray}/>
     </div>
     )

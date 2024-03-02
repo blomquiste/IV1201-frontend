@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import NavigationBar from "../components/NavigationBar";
 import UserInformationView from "../view/UserInformationView"
 import CompetenceView from "../view/CompetenceView"
 import AvailabilityView from "../view/AvailabilityView"
@@ -177,7 +176,6 @@ export default function Applicant({ user, handleLogout }) {
     }
 
     return (<div>
-        <NavigationBar user={user} handleLogout={handleLogout}/>
         {activeComponent===1 && <UserInformationView user={user} handleSave={updateData} showNext={showNext}/>}
         {activeComponent===2 && <CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} showNext={showNext}/>}
         {activeComponent===3 && <AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext}/>}
