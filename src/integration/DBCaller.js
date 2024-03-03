@@ -57,7 +57,7 @@ async function updateAccountByEmail(userdata){
  * This function calls the root api address plus the supplied URL and returns the HTTP response.
  * @param {String} url The API URL that will be called
  * @param {Object} data Will be sent in a POST request to the above address.
- * @returns HTTP responseif response status is 200, otherwise returns response status code.
+ * @returns HTTP response if response status is 200, otherwise returns response status code.
  */
 async function callAPI(url, data){
   const URL = 'http://localhost:8000/';

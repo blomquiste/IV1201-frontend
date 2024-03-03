@@ -5,7 +5,10 @@ import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
-import Overview from "./presenter/OverviewPresenter" import {
+import NavigationBar from "./components/NavigationBar";
+import {
+import Overview from "./presenter/OverviewPresenter";
+import {
     Authenticate,
     saveRegistrationData,
     restoreAccountByEmail,
@@ -70,22 +73,6 @@ function App() {
       setError(true)
     }
   }
-
-    /**
-     * Sign out functionality
-     * Calls the DBCaller function logout()
-     */
-    async function handleLogout() {
-        try {
-            sessionStorage.removeItem('user');
-            setLoggedIn(false);
-            setUserObject(null);
-            await logout();
-        } catch (e) {
-            console.error('Error during logout:', e);
-        }
-    }
-
     /**
      * Function that calls the backend api,
      * sets 'registered' boolean state to true on a successful api call.
@@ -117,6 +104,7 @@ function App() {
 
   return (<div className={"App"}>
         <Router>
+            {loggedIn && <NavigationBar/>}
             <Routes>
                 <Route path="/" element={!error && <Login
                        handleLogin = {handleLogin}
@@ -128,11 +116,10 @@ function App() {
                        registered={registered}/>}/>
                 <Route path="/updateUser" element = {!error && <MissingUserDataUpdate 
                        updateUserData = {updateUserData}/>}/>
-                <Route path="/register" element={!error && <Registration/>}/>
                 <Route path="/user" element={loggedIn ? <User
-                       user = {userObject}
-                       handleLogout={handleLogout}/> : <Error/>} />
+                       user = {userObject} /> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
+                       user = {userObject} /> : <Error/>} />
                         user = {userObject}
                         sendApplication={sendApplication} /> : <Error/>} />
                 <Route path="/overview" element={!error && <Overview/>}/>

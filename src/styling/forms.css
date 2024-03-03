@@ -48,6 +48,9 @@ button {
     border-radius: 8px;
     cursor: pointer;
 }
+button a:hover {
+    background-color: #37461f;
+}
 .remove{
     background: indianred;
 }

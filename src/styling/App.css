@@ -1,7 +1,7 @@
 .App {
   text-align: center;
 }
-
+/*
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -35,22 +35,31 @@
   to {
     transform: rotate(360deg);
   }
-}
+}*/
 
-.nav-bar {
-  position: fixed;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px;
-  width: calc(100% - 20px); /* Adjust width to accommodate margin */
+.nav-bar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: darkolivegreen;
 }
-
-.nav-bar a {
-  margin-left: auto; /* Move sign-out link to the right */
-  margin-right: auto; /* Move my-page link to the left */
+.nav-bar li {
+  float: left;
+}
+.nav-bar li a,
+.nav-bar li button {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.nav-bar li a:hover {
+  background-color: #37461f;
 }
 .success-message{
   border: solid;
-  background-color: green;
+  background: darkolivegreen;
 }
+
