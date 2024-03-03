@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
 import './styling/App.css';
 import Login from "./presenter/LoginPresenter"
 import Registration from "./presenter/RegistrationPresenter";
@@ -6,7 +8,6 @@ import Applicant from "./presenter/ApplicantPresenter"
 import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
 import NavigationBar from "./components/NavigationBar";
-import {
 import Overview from "./presenter/OverviewPresenter";
 import {
     Authenticate,
@@ -14,8 +15,6 @@ import {
     restoreAccountByEmail,
     logout,
 } from './integration/DBCaller'
-import React, { useState, useEffect } from "react";
-import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
 
 /** Express-based auth server that uses JWT tokens to authenticate users
  * npm i cors bcrypt jsonwebtoken lowdb
@@ -120,8 +119,6 @@ function App() {
                        user = {userObject} /> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
                        user = {userObject} /> : <Error/>} />
-                        user = {userObject}
-                        sendApplication={sendApplication} /> : <Error/>} />
                 <Route path="/overview" element={!error && <Overview/>}/>
                 <Route path="/error" element={error && <Error/>}  />
             </Routes>
