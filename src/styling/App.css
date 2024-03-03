@@ -47,7 +47,8 @@
 .nav-bar li {
   float: left;
 }
-.nav-bar li a {
+.nav-bar li a,
+.nav-bar li button {
   display: block;
   color: white;
   text-align: center;

@@ -25,7 +25,7 @@ export default function NavigationBar(){
                 <li><a href="/user">My page</a></li>
                 <li><a href="">News</a></li>
                 <li><a href="">About</a></li>
-                <li><button onClick={handleLogout}>Logout</button></li>
+                <li><a onClick={handleLogout}>Logout</a></li>
             </ul>
         </div>
     )

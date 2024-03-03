@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import '../styling/application.css'
+
+
 export default function UserView({user, competenceArray, availabilityArray}){
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -16,7 +19,7 @@ export default function UserView({user, competenceArray, availabilityArray}){
             <h2> {user.name}s application</h2>
             <div className={"applicationContainer"}>
                 {competenceArray.length === 0 && availabilityArray.length === 0 ? (
-                    <button>Go to application</button> ) : (
+                    <button><Link to={"/apply"}>Apply now</Link></button> ) : (
                 <div className="textContainer">
                     <div className="competence-container">
                         <h3>Competence</h3>
@@ -34,9 +37,9 @@ export default function UserView({user, competenceArray, availabilityArray}){
                             </div>
                         ))}
                     </div>
+                    <button /*TODO*/>Edit application</button>
                 </div>
                 )}
-                <button /*TODO*/>Edit application</button>
             </div>
         </div>
     )
