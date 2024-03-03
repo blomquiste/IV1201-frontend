@@ -73,8 +73,7 @@ async function callAPI(url, data){
       ,{mode:'cors'},);
     if(response.status !== 200)
       return response.status;
-    const result = await response.json()
-    return result;
+    return await response.json();
   }catch(e) {
     console.log(e);
   }
@@ -226,6 +225,32 @@ async function setAvailability(availabilityData){
   }
 }
 
+/**
+ * Calls api to fetch names and status of applicants names from
+ * @returns {Promise<number|JSX.Element|any>}
+ */
+async function fetchApplicants() {
+  const URL = 'http://localhost:8000/fetchapplicants';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
+  try {
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors'
+    });
+    if (!response.status) return <div>Loading</div>
+    if (!response.ok) {
+      return response.status;
+    }
+    return await response.json();;
+  } catch (e) {
+    console.error('Error fetching data', e);
+  }
+}
+
 async function getCompetences(person_id){
   const URL = `http://localhost:8000/getCompetences/${person_id}`;
   try {
@@ -270,8 +295,6 @@ async function getAvailabilities(person_id){
 }
 
 
-
-
 export {Authenticate, logout, restoreAccountByEmail, saveRegistrationData,
         updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence,
-        setAvailability, getCompetences, getAvailabilities}
+        setAvailability, fetchApplicants, getCompetences, getAvailabilities}

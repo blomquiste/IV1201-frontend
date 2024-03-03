@@ -7,6 +7,8 @@ import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
 import NavigationBar from "./components/NavigationBar";
 import {
+import Overview from "./presenter/OverviewPresenter";
+import {
     Authenticate,
     saveRegistrationData,
     restoreAccountByEmail,
@@ -114,11 +116,13 @@ function App() {
                        registered={registered}/>}/>
                 <Route path="/updateUser" element = {!error && <MissingUserDataUpdate 
                        updateUserData = {updateUserData}/>}/>
-                <Route path="/register" element={!error && <Registration/>}/>
                 <Route path="/user" element={loggedIn ? <User
                        user = {userObject} /> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
                        user = {userObject} /> : <Error/>} />
+                        user = {userObject}
+                        sendApplication={sendApplication} /> : <Error/>} />
+                <Route path="/overview" element={!error && <Overview/>}/>
                 <Route path="/error" element={error && <Error/>}  />
             </Routes>
         </Router>
