@@ -8,6 +8,9 @@ async function Authenticate(usernameAndPassword){
   const URL = 'login';
   return await callAPI(URL, usernameAndPassword)
 }
+/**
+ * TODO: Log out functionality 
+ */
 async function logout(){
   //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
   const URL = 'http://localhost:8000/logout'
@@ -226,7 +229,7 @@ async function setAvailability(availabilityData){
 }
 
 /**
- * Calls api to fetch names and status of applicants names from
+ * Calls api to fetch names and status of applicants names from database
  * @returns {Promise<number|JSX.Element|any>}
  */
 async function fetchApplicants() {
@@ -250,7 +253,11 @@ async function fetchApplicants() {
     console.error('Error fetching data', e);
   }
 }
-
+/**
+ * Calls api to fetch competences for an applicant from database
+ * @param person_id 
+ * @returns 
+ */
 async function getCompetences(person_id){
   const URL = `http://localhost:8000/getCompetences/${person_id}`;
   try {
@@ -272,6 +279,11 @@ async function getCompetences(person_id){
     console.error(e)
   }
 }
+/**
+ * Calls api to fetch availabilities for an applicant from database
+ * @param person_id 
+ * @returns 
+ */
 async function getAvailabilities(person_id){
   const URL = `http://localhost:8000/getAvailabilities/${person_id}`;
   try {
