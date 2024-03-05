@@ -27,7 +27,6 @@ function getAuthCookie(cookies){
  * TODO: Log out functionality 
  */
 async function logout(){
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
   const URL = backendURL + 'logout'
   try {
     const response = await fetch(URL, {
@@ -79,7 +78,6 @@ async function updateAccountByEmail(userdata){
  */
 async function callAPI(url, data){
   const URL = backendURL;
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
   try{
     const response = await fetch(URL + url, 
       {method: 'POST',
@@ -135,7 +133,6 @@ async function saveRegistrationData(userdata) {
  */
 async function saveUpdatedData(data){
   const URL = backendURL + 'update';
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/update'
   try {
     const response = await fetch(URL,{
     method: 'POST',
@@ -166,7 +163,6 @@ async function saveUpdatedData(data){
 async function fetchTable() {
   console.log("cookies: " + document.cookie);
   const URL = backendURL + 'fetch';
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
   try {
     const response = await fetch(URL, {
       method: 'GET',
@@ -196,7 +192,6 @@ async function fetchTable() {
  * @returns {Promise<number>}
  */
 async function setCompetence(competenceData){
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
   const URL = backendURL + 'setCompetence';
   try {
     const response = await fetch(URL,{
@@ -227,7 +222,6 @@ async function setCompetence(competenceData){
  * @returns {Promise<void>}
  */
 async function setAvailability(availabilityData){
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
   const URL = backendURL + 'setAvailability';
   try {
     const response = await fetch(URL,{
@@ -257,7 +251,6 @@ async function setAvailability(availabilityData){
  */
 async function fetchApplicants() {
   const URL = backendURL + 'fetchapplicants';
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
   try {
     const response = await fetch(URL, {
       method: 'GET',
