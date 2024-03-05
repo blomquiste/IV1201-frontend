@@ -9,7 +9,16 @@ async function Authenticate(usernameAndPassword){
   const response = await callAPI(URL, usernameAndPassword);
   console.log(response.JWTToken)
   document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure";
+  console.log('auth token:' + getAuthCookie(document.cookie))
   return response; 
+}
+/**
+ * Only works if the authorisation cookie is the first one of all the cookies. 
+ * @param {String} cookies All current cookies
+ * @returns the JWTToken used for authorisation against the backend. 
+ */
+function getAuthCookie(cookies){
+  return cookies.split(';')[0].split('=')[1];
 }
 /**
  * TODO: Log out functionality 
@@ -162,7 +171,7 @@ async function fetchTable() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie':sessionStorage.getItem('JWTToken'),
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
@@ -191,7 +200,8 @@ async function setCompetence(competenceData){
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       body: JSON.stringify(competenceData),
       mode:'cors'
@@ -269,13 +279,16 @@ async function fetchApplicants() {
  * @returns 
  */
 async function getCompetences(person_id){
+  console.log("getCompetences cookies: " + document.cookie);
   const URL = `http://localhost:8000/getCompetences/${person_id}`;
   try {
     const response = await fetch(URL,{
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode:'cors'
     });
@@ -299,9 +312,11 @@ async function getAvailabilities(person_id){
   try {
     const response = await fetch(URL,{
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode:'cors'
     });

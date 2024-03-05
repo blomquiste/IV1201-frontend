@@ -5,7 +5,7 @@ import AvailabilityView from "../view/AvailabilityView"
 import SummaryView from "../view/SummaryView"
 import {fetchTable, saveUpdatedData, setAvailability, setCompetence} from '../integration/DBCaller'
 import Error from "../view/ErrorView";
-
+import NavigationBar from "../components/NavigationBar";
 /**
  * The interface for an authenticated user with role_id 2. The user can submit an application from here
  * Data is persistent with sessionStorage
@@ -183,13 +183,13 @@ export default function Applicant({ user, handleLogout }) {
             console.error("Error sending availabilities:", e);
         }
     }
-
+    //<NavigationBar user={user} handleLogout={handleLogout}/>
     return (<div>
-        <NavigationBar user={user} handleLogout={handleLogout}/>
+        
         {activeComponent===1 && !error && <UserInformationView user={user} handleSave={updateData} showNext={showNext}/>}
         {activeComponent===2 && !error &&<CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} fetchCompetenceAreas={fetchCompetenceAreas} showNext={showNext}/>}
         {activeComponent===3 && !error &&<AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext}/>}
-        {activeComponent===4 && !error &&<SummaryView formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} />}
+        {activeComponent===4 && !error &&<SummaryView formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} user={user}/>}
         {error && <Error/>}
     </div>);
 }
