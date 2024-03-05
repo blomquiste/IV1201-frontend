@@ -27,9 +27,6 @@ function getAuthCookie(cookies){
  * TODO: Log out functionality 
  */
 async function logout(){
-  sessionStorage.clear();
-  document.cookie = ""; 
-  window.location.reload();
   /*const URL = backendURL + 'logout'
   try {
     const response = await fetch(URL, {
