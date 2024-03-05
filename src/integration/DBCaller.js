@@ -315,7 +315,7 @@ async function getAvailabilities(person_id){
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'authCookie':getAuthCookie(document.cookie),
-      },
+        },
       mode:'cors'
     });
     if (response.ok) {
