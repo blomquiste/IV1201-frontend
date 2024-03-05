@@ -1,4 +1,5 @@
 import OverviewView from "../view/OverviewView";
+import Error from "../view/ErrorView";
 import React, {useState} from "react";
 import {fetchApplicants} from "../integration/DBCaller";
 
@@ -10,10 +11,13 @@ import {fetchApplicants} from "../integration/DBCaller";
 export default function Overview() {
     const sortOptions = ["First name", "Surname", "Application status"]
     const [applicationsObject, setApplicationsObject] = useState(null);
+    const [error, setError] = useState(false);
     async function getApplications() {
         if(!applicationsObject) {
             try {
                 const response = await fetchApplicants();
+                if(response === 500)
+                    setError(true)
                 await setApplicationsObject(response);
             } catch(e) {
                 console.log('Error in presenter fetching data')
@@ -27,13 +31,13 @@ export default function Overview() {
         //TODO
     }
 
-    return (
-        <OverviewView
-            loadApplications={getApplications()}
-            applications={applicationsObject}
-            onApplication={onApplication()}
-            sortOptions={sortOptions}
-            onSort={sortApplications()}
-        />
-    )
+    return (<>{!error && <OverviewView
+        loadApplications={getApplications()}
+        applications={applicationsObject}
+        onApplication={onApplication()}
+        sortOptions={sortOptions}
+        onSort={sortApplications()}
+    />}
+        {error && <Error />}
+        </>)
 }

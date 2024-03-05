@@ -1,3 +1,6 @@
+const backendURL = 'http://localhost:8000/';
+//const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+
 /**
  * Calls backend api to authenticate a user on login. 
  * @param {Object} usernameAndPassword takes argument on the form of: {username: 'username', password:'pw'}
@@ -24,8 +27,8 @@ function getAuthCookie(cookies){
  * TODO: Log out functionality 
  */
 async function logout(){
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
-  //const URL = 'http://localhost:8000/logout'
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
+  const URL = backendURL + 'logout'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -75,8 +78,8 @@ async function updateAccountByEmail(userdata){
  * @returns HTTP response if response status is 200, otherwise returns response status code.
  */
 async function callAPI(url, data){
-  //const URL = 'http://localhost:8000/';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+  const URL = backendURL;
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
   try{
     const response = await fetch(URL + url, 
       {method: 'POST',
@@ -101,8 +104,7 @@ async function callAPI(url, data){
  * @returns {Promise<boolean>} True if response status is 200 or 201
  */
 async function saveRegistrationData(userdata) {
-  //const URL = 'http://localhost:8000/registration'
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/registration'
+  const URL = backendURL + 'registration'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -132,7 +134,7 @@ async function saveRegistrationData(userdata) {
  * @returns {Promise<boolean>}
  */
 async function saveUpdatedData(data){
-  const URL = 'http://localhost:8000/update';
+  const URL = backendURL + 'update';
   //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/update'
   try {
     const response = await fetch(URL,{
@@ -162,8 +164,9 @@ async function saveUpdatedData(data){
  * @returns {Promise<number|any>}
  */
 async function fetchTable() {
-  //const URL = 'http://localhost:8000/fetch';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
+  console.log("cookies: " + document.cookie);
+  const URL = backendURL + 'fetch';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
   try {
     const response = await fetch(URL, {
       method: 'GET',
@@ -193,8 +196,8 @@ async function fetchTable() {
  * @returns {Promise<number>}
  */
 async function setCompetence(competenceData){
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
-  //const URL = 'http://localhost:8000/setCompetence';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
+  const URL = backendURL + 'setCompetence';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -224,8 +227,8 @@ async function setCompetence(competenceData){
  * @returns {Promise<void>}
  */
 async function setAvailability(availabilityData){
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
-  //const URL = 'http://localhost:8000/setAvailability';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
+  const URL = backendURL + 'setAvailability';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -253,14 +256,16 @@ async function setAvailability(availabilityData){
  * @returns {Promise<number|JSX.Element|any>}
  */
 async function fetchApplicants() {
-  //const URL = 'http://localhost:8000/fetchapplicants';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
+  const URL = backendURL + 'fetchapplicants';
+  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
   try {
     const response = await fetch(URL, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
@@ -279,8 +284,8 @@ async function fetchApplicants() {
  * @returns 
  */
 async function getCompetences(person_id){
-  console.log("getCompetences cookies: " + document.cookie);
-  const URL = `http://localhost:8000/getCompetences/${person_id}`;
+  //console.log("getCompetences cookies: " + document.cookie);
+  const URL = backendURL + `getCompetences/${person_id}`;
   try {
     const response = await fetch(URL,{
       method: 'GET',
@@ -308,7 +313,7 @@ async function getCompetences(person_id){
  * @returns 
  */
 async function getAvailabilities(person_id){
-  const URL = `http://localhost:8000/getAvailabilities/${person_id}`;
+  const URL = backendURL + `getAvailabilities/${person_id}`;
   try {
     const response = await fetch(URL,{
       method: 'GET',
