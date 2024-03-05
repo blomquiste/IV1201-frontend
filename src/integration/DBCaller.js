@@ -27,7 +27,10 @@ function getAuthCookie(cookies){
  * TODO: Log out functionality 
  */
 async function logout(){
-  const URL = backendURL + 'logout'
+  sessionStorage.clear();
+  document.cookie = ""; 
+  window.location.reload();
+  /*const URL = backendURL + 'logout'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -45,7 +48,7 @@ async function logout(){
     }
   } catch (e) {
     console.error('Error during logout:', e);
-  }
+  }*/
 }
 /**
  * Calls the API to check if account with this email exists and if it is missing username and password.

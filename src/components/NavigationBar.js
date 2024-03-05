@@ -12,9 +12,12 @@ export default function NavigationBar(){
 
     const handleLogout = async () => {
         try {
-            await logout();
+            sessionStorage.clear();
+            document.cookie = ""; 
+            //window.location.reload();
             console.log("Logged out successfully");
             navigate("/")
+            window.location.reload();
         } catch (error) {
             console.error("Error during logout:", error);
         }
