@@ -32,6 +32,8 @@ function LoginView(props) {
         <div className={"mainContainer"}>
             <h1>Welcome!</h1>
             <p>Please sign in before submitting an application</p>
+            <div>JoelleWilkinson</div>
+            <div>LiZ98qvL8Lw</div>
             <form onSubmit={handleSubmit}>
                 <div className={"inputGroup"}>
                     <input type="username"

@@ -6,8 +6,8 @@ import React from "react";
  */
 export default function ErrorView() {
   return (<>
-    <div>server error</div>
-    <p>Already have an account? <Link to={"/login"}>Sign in</Link></p>
-    <p>Add username and password to an existing account? <Link to={"/updateUser"}>Click here</Link></p>
+    <h2>Server error</h2>
+    <div>Service unavailable, contact the site admin if problem persists</div>
+    <button onClick={() => {window.location.reload()}}>return to start site</button>
   </>)
 }

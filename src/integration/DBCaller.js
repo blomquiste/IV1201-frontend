@@ -1,3 +1,6 @@
+const backendURL = 'http://localhost:8000/';
+//const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+
 /**
  * Calls backend api to authenticate a user on login. 
  * @param {Object} usernameAndPassword takes argument on the form of: {username: 'username', password:'pw'}
@@ -6,14 +9,25 @@
  */
 async function Authenticate(usernameAndPassword){
   const URL = 'login';
-  return await callAPI(URL, usernameAndPassword)
+  const response = await callAPI(URL, usernameAndPassword);
+  console.log(response.JWTToken)
+  document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure";
+  console.log('auth token:' + getAuthCookie(document.cookie))
+  return response; 
+}
+/**
+ * Only works if the authorisation cookie is the first one of all the cookies. 
+ * @param {String} cookies All current cookies
+ * @returns the JWTToken used for authorisation against the backend. 
+ */
+function getAuthCookie(cookies){
+  return cookies.split(';')[0].split('=')[1];
 }
 /**
  * TODO: Log out functionality 
  */
 async function logout(){
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
-  //const URL = 'http://localhost:8000/logout'
+  const URL = backendURL + 'logout'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -63,8 +77,7 @@ async function updateAccountByEmail(userdata){
  * @returns HTTP response if response status is 200, otherwise returns response status code.
  */
 async function callAPI(url, data){
-  //const URL = 'http://localhost:8000/';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+  const URL = backendURL;
   try{
     const response = await fetch(URL + url, 
       {method: 'POST',
@@ -79,6 +92,7 @@ async function callAPI(url, data){
     return await response.json();
   }catch(e) {
     console.log(e);
+    throw new Error();
   }
 }
 
@@ -88,8 +102,7 @@ async function callAPI(url, data){
  * @returns {Promise<boolean>} True if response status is 200 or 201
  */
 async function saveRegistrationData(userdata) {
-  //const URL = 'http://localhost:8000/registration'
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/registration'
+  const URL = backendURL + 'registration'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -119,8 +132,7 @@ async function saveRegistrationData(userdata) {
  * @returns {Promise<boolean>}
  */
 async function saveUpdatedData(data){
-  const URL = 'http://localhost:8000/update';
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/update'
+  const URL = backendURL + 'update';
   try {
     const response = await fetch(URL,{
     method: 'POST',
@@ -140,6 +152,7 @@ async function saveUpdatedData(data){
     }
   }catch(e){
     console.error(e);
+    throw new Error();
   }
 }
 
@@ -148,14 +161,16 @@ async function saveUpdatedData(data){
  * @returns {Promise<number|any>}
  */
 async function fetchTable() {
-  //const URL = 'http://localhost:8000/fetch';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
+  console.log("cookies: " + document.cookie);
+  const URL = backendURL + 'fetch';
   try {
     const response = await fetch(URL, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
@@ -167,6 +182,7 @@ async function fetchTable() {
     }
   } catch (e) {
     console.error(e);
+    throw new Error();
   }
 }
 
@@ -176,14 +192,14 @@ async function fetchTable() {
  * @returns {Promise<number>}
  */
 async function setCompetence(competenceData){
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
-  //const URL = 'http://localhost:8000/setCompetence';
+  const URL = backendURL + 'setCompetence';
   try {
     const response = await fetch(URL,{
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       body: JSON.stringify(competenceData),
       mode:'cors'
@@ -197,6 +213,7 @@ async function setCompetence(competenceData){
     }
   }catch(e){
     console.error(e);
+    throw new Error();
   }
 }
 /**
@@ -205,8 +222,7 @@ async function setCompetence(competenceData){
  * @returns {Promise<void>}
  */
 async function setAvailability(availabilityData){
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
-  //const URL = 'http://localhost:8000/setAvailability';
+  const URL = backendURL + 'setAvailability';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -234,14 +250,15 @@ async function setAvailability(availabilityData){
  * @returns {Promise<number|JSX.Element|any>}
  */
 async function fetchApplicants() {
-  //const URL = 'http://localhost:8000/fetchapplicants';
-  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
+  const URL = backendURL + 'fetchapplicants';
   try {
     const response = await fetch(URL, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
@@ -260,13 +277,16 @@ async function fetchApplicants() {
  * @returns 
  */
 async function getCompetences(person_id){
-  const URL = `http://localhost:8000/getCompetences/${person_id}`;
+  //console.log("getCompetences cookies: " + document.cookie);
+  const URL = backendURL + `getCompetences/${person_id}`;
   try {
     const response = await fetch(URL,{
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode:'cors'
     });
@@ -286,14 +306,16 @@ async function getCompetences(person_id){
  * @returns 
  */
 async function getAvailabilities(person_id){
-  const URL = `http://localhost:8000/getAvailabilities/${person_id}`;
+  const URL = backendURL + `getAvailabilities/${person_id}`;
   try {
     const response = await fetch(URL,{
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+        'Content-Type': 'application/json',
+        'authCookie':getAuthCookie(document.cookie),
+        },
       mode:'cors'
     });
     if (response.ok) {

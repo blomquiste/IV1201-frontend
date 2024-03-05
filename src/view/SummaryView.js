@@ -30,7 +30,7 @@ function SummaryView({user, formData, sendApplication, resetFormAndComponent}) {
             <ul>
                 {formData.competences.map((competence, index) => (
                     <p key={index}>
-                        {competence.expertise}, {competence.yearsOfExperience} months experience
+                        {competence.expertise}, {competence.monthsOfExperience} months experience
                     </p>
                 ))}
             </ul>
