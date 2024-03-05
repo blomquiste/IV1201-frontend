@@ -12,8 +12,8 @@ async function Authenticate(usernameAndPassword){
  * TODO: Log out functionality 
  */
 async function logout(){
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
-  const URL = 'http://localhost:8000/logout'
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/logout'
+  //const URL = 'http://localhost:8000/logout'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -63,8 +63,8 @@ async function updateAccountByEmail(userdata){
  * @returns HTTP response if response status is 200, otherwise returns response status code.
  */
 async function callAPI(url, data){
-  const URL = 'http://localhost:8000/';
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+  //const URL = 'http://localhost:8000/';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/'
   try{
     const response = await fetch(URL + url, 
       {method: 'POST',
@@ -88,7 +88,8 @@ async function callAPI(url, data){
  * @returns {Promise<boolean>} True if response status is 200 or 201
  */
 async function saveRegistrationData(userdata) {
-  const URL = 'http://localhost:8000/registration'
+  //const URL = 'http://localhost:8000/registration'
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/registration'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -147,8 +148,8 @@ async function saveUpdatedData(data){
  * @returns {Promise<number|any>}
  */
 async function fetchTable() {
-  const URL = 'http://localhost:8000/fetch';
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
+  //const URL = 'http://localhost:8000/fetch';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetch'
   try {
     const response = await fetch(URL, {
       method: 'GET',
@@ -175,8 +176,8 @@ async function fetchTable() {
  * @returns {Promise<number>}
  */
 async function setCompetence(competenceData){
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
-  const URL = 'http://localhost:8000/setCompetence';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/competence';
+  //const URL = 'http://localhost:8000/setCompetence';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -204,8 +205,8 @@ async function setCompetence(competenceData){
  * @returns {Promise<void>}
  */
 async function setAvailability(availabilityData){
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
-  const URL = 'http://localhost:8000/setAvailability';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/availability';
+  //const URL = 'http://localhost:8000/setAvailability';
   try {
     const response = await fetch(URL,{
       method: 'POST',
@@ -233,8 +234,8 @@ async function setAvailability(availabilityData){
  * @returns {Promise<number|JSX.Element|any>}
  */
 async function fetchApplicants() {
-  const URL = 'http://localhost:8000/fetchapplicants';
-  //const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
+  //const URL = 'http://localhost:8000/fetchapplicants';
+  const URL = 'https://archdes-abbcfaefce39.herokuapp.com/fetchapplications'
   try {
     const response = await fetch(URL, {
       method: 'GET',

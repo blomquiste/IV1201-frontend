@@ -30,9 +30,10 @@ import {
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [userObject, setUserObject] = useState({});
-    const[failedLogin, setFailedLogin] = useState(false);
+    const [failedLogin, setFailedLogin] = useState(false);
+    const [recruiter, setRecruiter] = useState(false);
 
-    const[error, setError] = useState(false);
+    const [error, setError] = useState(false);
     const [registered, setRegistered] = useState(false);
 
     useEffect(() => {
@@ -61,10 +62,11 @@ function App() {
         throw new Error("500 http code from server")
       }
       else{
-        console.error(response)
+        console.error("RESPONSE: ", response.role_id)
         setFailedLogin(false)
         setUserObject(response)
         setLoggedIn(true)
+        response.role_id===1?setRecruiter(true):setRecruiter(false) //TODO
         sessionStorage.setItem('user', JSON.stringify(response));
       }
     }catch(e){
@@ -109,17 +111,18 @@ function App() {
                        handleLogin = {handleLogin}
                        failedLogin = {failedLogin}
                        user = {userObject}
-                       loggedIn={loggedIn}/>}/>
+                       loggedIn={loggedIn}
+                       recruiter={recruiter}/>}/>
                 <Route path="/register" element={!error && <Registration
                        handleRegistration={handleRegistration}
                        registered={registered}/>}/>
                 <Route path="/updateUser" element = {!error && <MissingUserDataUpdate 
                        updateUserData = {updateUserData}/>}/>
-                <Route path="/user" element={loggedIn ? <User
+                <Route path="/user" element={loggedIn && !recruiter ? <User
                        user = {userObject} /> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
                        user = {userObject} /> : <Error/>} />
-                <Route path="/overview" element={!error && <Overview/>}/>
+                <Route path="/overview" element={loggedIn && recruiter ? <Overview/> : <Error/>}/>
                 <Route path="/error" element={error && <Error/>}  />
             </Routes>
         </Router>
