@@ -19,7 +19,7 @@ export default function Login(props) {
     return (<>
             <div>{!props.loggedIn && !props.failedLogin && <LoginView onLogin={props.handleLogin}/>}</div>
             <div>{props.loggedIn && !props.recruiter && <User user={props.user}/>}</div>
-            <div>{props.loggedIn && props.recruiter && <Overview/>}</div>
+            <div>{props.loggedIn && props.recruiter && <Overview user={props.user}/>}</div>
 
             <div>{props.failedLogin && <FailedLoginView onLogin={props.handleLogin}/>}</div>
         </>
