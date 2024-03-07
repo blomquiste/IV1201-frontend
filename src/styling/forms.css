@@ -77,3 +77,6 @@ button a:hover {
     left: 0;
     width: 100%; /* Ensure the error message spans the full width of the input */
 }
+.success-message{
+    color: green;
+}
