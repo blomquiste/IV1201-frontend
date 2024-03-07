@@ -98,6 +98,7 @@ export default function CompetenceView({ competences, handleCompetenceSave }) {
                     <div className={"inputGroup"}>
                         <label htmlFor={"monthsOfExperience"}>Experience within the field</label>
                         <input type={"number"}
+                               min={"0"}
                                id={"monthsOfExperience"}
                                name={"monthsOfExperience"}
                                onChange={formik.handleChange}
