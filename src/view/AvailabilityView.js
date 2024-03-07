@@ -1,7 +1,16 @@
-import {useFormik} from "formik";
-import React, {useState} from "react";
+import { useFormik } from "formik";
+import React, { useState } from "react";
 
-export default function AvailabilityView({props, handleAvailabilitySave}) {
+/**
+ * AvailabilityView renders the user interface for inputting availability.
+ * Renders the availability from the 'availability' table and saves the input data to the final step of the application.
+ * The submit function validates the form, checks if the form is valid, finds the id for the particular availability chosen.
+ *
+ * @param props
+ * @param handleAvailabilitySave the Availabilities to be saved.
+ * @return availiability div view.
+ */
+export default function AvailabilityView({ props, handleAvailabilitySave }) {
     const [availabilityChoices, setAvailabilityChoices] = useState([]);
     //handleAvailabilitySave(values);
 
@@ -12,7 +21,7 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
         setAvailabilityChoices(updatedAvailabilityChoices);
     };
     async function validateFormAndProceed(handleSave, availabilityChoices) {
-        if (availabilityChoices.length!==0) {
+        if (availabilityChoices.length !== 0) {
             handleSave(availabilityChoices);
         } else {
             console.log("Form has validation errors. Cannot proceed.");
@@ -24,14 +33,14 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
             from_date: [],
             to_date: [],
         },
-        onSubmit: async (values)=>{
+        onSubmit: async (values) => {
             setAvailabilityChoices([...availabilityChoices, values]);
             formik.resetForm();
         },
         validate: values => {
             let errors = {}
-            if(values.from_date.length===0){errors.from_date = "Required"}
-            if(values.to_date.length===0){errors.to_date = "Required"}
+            if (values.from_date.length === 0) { errors.from_date = "Required" }
+            if (values.to_date.length === 0) { errors.to_date = "Required" }
             return errors;
         }
     })
@@ -43,19 +52,19 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
                     <div className={"inputGroup"}>
                         <label htmlFor="from_date">Start date</label>
                         <input type={"date"}
-                               name={"from_date"}
-                               id={"from_date"}
-                               placeholder={"Start date yy-mm-dd"}
-                               onChange={formik.handleChange}/>
+                            name={"from_date"}
+                            id={"from_date"}
+                            placeholder={"Start date yy-mm-dd"}
+                            onChange={formik.handleChange} />
                         {formik.errors.from_date ? <div className={"error-message"}>{formik.errors.from_date}</div> : null}
                     </div>
                     <div className={"inputGroup"}>
                         <label htmlFor="to_date">End date</label>
                         <input type={"date"}
-                               name={"to_date"}
-                               id={"to_date"}
-                               placeholder={"End date yy-mm-dd"}
-                               onChange={formik.handleChange}/>
+                            name={"to_date"}
+                            id={"to_date"}
+                            placeholder={"End date yy-mm-dd"}
+                            onChange={formik.handleChange} />
                         {formik.errors.to_date ? <div className={"error-message"}>{formik.errors.to_date}</div> : null}
                     </div>
                     <button type={"submit"}>Add</button>
@@ -71,7 +80,7 @@ export default function AvailabilityView({props, handleAvailabilitySave}) {
                         ))}
                     </ul>
                 </div>
-                <button onClick={()=>validateFormAndProceed(handleAvailabilitySave, availabilityChoices)}>Next</button>
+                <button onClick={() => validateFormAndProceed(handleAvailabilitySave, availabilityChoices)}>Next</button>
             </div>
         </div>
     )

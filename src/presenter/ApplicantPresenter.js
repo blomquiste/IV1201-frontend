@@ -3,9 +3,10 @@ import UserInformationView from "../view/UserInformationView"
 import CompetenceView from "../view/CompetenceView"
 import AvailabilityView from "../view/AvailabilityView"
 import SummaryView from "../view/SummaryView"
-import {fetchTable, saveUpdatedData, setAvailability, setCompetence} from '../integration/DBCaller'
+import { fetchTable, saveUpdatedData, setAvailability, setCompetence } from '../integration/DBCaller'
 import Error from "../view/ErrorView";
 import NavigationBar from "../components/NavigationBar";
+
 /**
  * The interface for an authenticated user with role_id 2. The user can submit an application from here
  * Data is persistent with sessionStorage
@@ -16,7 +17,7 @@ export default function Applicant({ user, handleLogout }) {
     const [updated, setUpdated] = useState(false);
     const [activeComponent, setActiveComponent] = useState(1);
     const [applicationSubmitted, setApplicationSubmitted] = useState(false);
-    const[error, setError] = useState(false);
+    const [error, setError] = useState(false);
     useEffect(() => {
         const storedActiveComponent = sessionStorage.getItem('activeComponent');
         if (storedActiveComponent !== null && storedActiveComponent !== undefined) {
@@ -49,7 +50,11 @@ export default function Applicant({ user, handleLogout }) {
         }
     };
 
-    async function updateData(data){
+    /**
+     * Update the presenter with new data
+     * @param data the data to be updated.
+     */
+    async function updateData(data) {
         try {
             const response = await saveUpdatedData(data);
             console.log("App.js, saved data: ", response);
@@ -57,11 +62,12 @@ export default function Applicant({ user, handleLogout }) {
                 console.log("User info updated successfully ", response);
                 setUpdated(true);
             }
-        }catch (e){
+        } catch (e) {
             console.error("Error saving user information: ", e);
             setError(true)
         }
     }
+
     /**
      * Fetching rows from table competence in db,
      */
@@ -69,18 +75,21 @@ export default function Applicant({ user, handleLogout }) {
         fetchCompetenceAreas();
     }, []);
     async function fetchCompetenceAreas() {
-        if(!competenceObject){
+        if (!competenceObject) {
             try {
                 const response = await fetchTable();
-                if(response==500){
+                if (response == 500) {
                     console.log("unauthprized")
-                    throw new Error('server unavailable')}
+                    throw new Error('server unavailable')
+                }
                 await setCompetenceObject(response);
-            } catch(e){
+            } catch (e) {
                 console.error(e);
                 setError(true);
-            }}
+            }
+        }
     }
+
     /**
      * Stores the form data between views, also appends to existing array of data
      * @param competenceData The areas of expertise and amount of experience input by the user
@@ -99,10 +108,11 @@ export default function Applicant({ user, handleLogout }) {
         sessionStorage.setItem('formData', JSON.stringify(updatedCompetences));
         showNext();
     };
+
     /**
      * @param availabilityData The availability periods input by the user
      */
-    const handleAvailabilitySave = (availabilityData) =>{
+    const handleAvailabilitySave = (availabilityData) => {
         setFormData(prevData => ({
             ...prevData,
             availabilities: [...prevData.availabilities, ...availabilityData]
@@ -116,10 +126,11 @@ export default function Applicant({ user, handleLogout }) {
         sessionStorage.setItem('formData', JSON.stringify(updatedAvailabilities));
         showNext();
     }
+
     /**
      * Resets the form upon the users request
      */
-    async function resetFormAndComponent(){
+    async function resetFormAndComponent() {
         setFormData({
             competences: [],
             availabilities: []
@@ -129,11 +140,11 @@ export default function Applicant({ user, handleLogout }) {
         sessionStorage.setItem('activeComponent', JSON.stringify(1));
     }
     /**
-     * Sends the users application by calling 'saveApplicationData' in the DBCaller
+     * Sends the users application by calling sendCompetence and sendAvailability in the DBCaller
      * @param data
      * @returns {Promise<void>}
      */
-    async function sendApplication(data){
+    async function sendApplication(data) {
         try {
             const { competences, availabilities, person_id } = data;
 
@@ -142,7 +153,7 @@ export default function Applicant({ user, handleLogout }) {
                 person_id,
                 monthsOfExperience
             }));
-            const availabilityData = availabilities.map( ({ from_date, to_date })=> ({
+            const availabilityData = availabilities.map(({ from_date, to_date }) => ({
                 person_id,
                 from_date,
                 to_date
@@ -155,7 +166,7 @@ export default function Applicant({ user, handleLogout }) {
                 setApplicationSubmitted(true);
                 console.log("Application sent successfully");
                 return true;
-            }else{
+            } else {
                 console.log("Submitting application was unsuccessful");
                 return false;
             }
@@ -164,7 +175,13 @@ export default function Applicant({ user, handleLogout }) {
             return false;
         }
     }
-    async function sendCompetence(competences){
+
+    /**
+ * Sends the users competence by calling 'setCompetence' in the DBCaller
+ * @param competences
+ * @returns {Promise<void>}
+ */
+    async function sendCompetence(competences) {
         try {
             const responses = await Promise.all(competences.map(competence => setCompetence(competence)));
             return responses.every(response => response !== null);
@@ -173,23 +190,27 @@ export default function Applicant({ user, handleLogout }) {
             setError(true);
         }
     }
-
-    async function sendAvailability(availabilities){
+    /**
+ * Sends the users availability by calling 'setAvailability' in the DBCaller
+ * @param availabilities to be saved
+ * @returns response
+ */
+    async function sendAvailability(availabilities) {
         try {
             console.log(availabilities);
             const responses = await Promise.all(availabilities.map(availability => setAvailability(availability)));
             return responses.every(response => response !== null);
-        }catch(e){
+        } catch (e) {
             console.error("Error sending availabilities:", e);
         }
     }
     //<NavigationBar user={user} handleLogout={handleLogout}/>
     return (<div>
-        
-        {activeComponent===1 && !error && <UserInformationView user={user} handleSave={updateData} showNext={showNext}/>}
-        {activeComponent===2 && !error &&<CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} fetchCompetenceAreas={fetchCompetenceAreas} showNext={showNext}/>}
-        {activeComponent===3 && !error &&<AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext}/>}
-        {activeComponent===4 && !error &&<SummaryView formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} user={user}/>}
-        {error && <Error/>}
+
+        {activeComponent === 1 && !error && <UserInformationView user={user} handleSave={updateData} showNext={showNext} />}
+        {activeComponent === 2 && !error && <CompetenceView competences={competenceObject} handleCompetenceSave={handleCompetenceSave} fetchCompetenceAreas={fetchCompetenceAreas} showNext={showNext} />}
+        {activeComponent === 3 && !error && <AvailabilityView handleAvailabilitySave={handleAvailabilitySave} showNext={showNext} />}
+        {activeComponent === 4 && !error && <SummaryView formData={formData} sendApplication={sendApplication} resetFormAndComponent={resetFormAndComponent} user={user} />}
+        {error && <Error />}
     </div>);
 }
