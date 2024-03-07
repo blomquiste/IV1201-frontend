@@ -14,7 +14,8 @@ The backend server can be found here: (https://github.com/blomquiste/IV1201-back
 ### Database
 PostgreSQL
 ### Deployment
-Heroku
+The application is deployed with Heroku and can be found on this URL:
+https://archdes-frontend-5528c891010d.herokuapp.com/
 
 ## Setup
 * Install Node.js and PostgreSQL
