@@ -7,6 +7,7 @@ import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
+import ErrorURL from "./view/ErrorURLView";
 import NavigationBar from "./components/NavigationBar";
 import Overview from "./presenter/OverviewPresenter";
 import {
@@ -126,11 +127,11 @@ function App() {
                 <Route path="/apply" element={loggedIn ? <Applicant
                        user = {userObject} /> : <Error/>} />
                 <Route path="/overview" element={loggedIn && recruiter ? <Overview/> : <Error/>}/>
-                <Route path="/error" element={error && <Error/>}  />
+                <Route path="/" element={error && <Error/>}  />
+                <Route path="/error" element={ <ErrorURL />} />
             </Routes>
         </Router>
       
     </div>)
 }
 export default App;
-//<div>{error && <Error/>}</div>

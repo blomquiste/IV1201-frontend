@@ -92,7 +92,7 @@ async function callAPI(url, data){
     return await response.json();
   }catch(e) {
     console.log(e);
-    throw new Error();
+    throw e;
   }
 }
 
