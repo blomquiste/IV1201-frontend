@@ -1,7 +1,13 @@
 import React from "react";
 import '../styling/forms.css';
 import {useFormik} from "formik";
-
+/**
+ * Renders the view the user information.
+ * @param user user data.
+ * @param handleSave 
+ * @param showNext
+ * @returns  div with user information.
+ */
 export default function UserInformationView({user, handleSave, showNext}) {
     async function storeUserData(values){
         try {

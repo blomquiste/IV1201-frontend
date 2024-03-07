@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import LoginView from "../view/LoginView";
 import FailedLoginView from "../view/FailedLoginView"
 import User from "./UserPresenter";
@@ -17,11 +17,11 @@ import Overview from "./OverviewPresenter";
  */
 export default function Login(props) {
     return (<>
-            <div>{!props.loggedIn && !props.failedLogin && <LoginView onLogin={props.handleLogin}/>}</div>
-            <div>{props.loggedIn && !props.recruiter && <User user={props.user}/>}</div>
-            <div>{props.loggedIn && props.recruiter && <Overview user={props.user}/>}</div>
+        <div>{!props.loggedIn && !props.failedLogin && <LoginView onLogin={props.handleLogin} />}</div>
+        <div>{props.loggedIn && !props.recruiter && <User user={props.user} />}</div>
+        <div>{props.loggedIn && props.recruiter && <Overview user={props.user} />}</div>
 
-            <div>{props.failedLogin && <FailedLoginView onLogin={props.handleLogin}/>}</div>
-        </>
+        <div>{props.failedLogin && <FailedLoginView onLogin={props.handleLogin} />}</div>
+    </>
     )
 }

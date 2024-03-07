@@ -7,26 +7,26 @@ const backendURL = 'http://localhost:8000/';
  * @returns a user json object on a succesful authentication, 
  * otherwise returns an int with the http error status.
  */
-async function Authenticate(usernameAndPassword){
+async function Authenticate(usernameAndPassword) {
   const URL = 'login';
   const response = await callAPI(URL, usernameAndPassword);
   console.log(response.JWTToken)
   document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure";
   console.log('auth token:' + getAuthCookie(document.cookie))
-  return response; 
+  return response;
 }
 /**
  * Only works if the authorisation cookie is the first one of all the cookies. 
  * @param {String} cookies All current cookies
  * @returns the JWTToken used for authorisation against the backend. 
  */
-function getAuthCookie(cookies){
+function getAuthCookie(cookies) {
   return cookies.split(';')[0].split('=')[1];
 }
 /**
  * TODO: Log out functionality 
  */
-async function logout(){
+async function logout() {
   /*const URL = backendURL + 'logout'
   try {
     const response = await fetch(URL, {
@@ -54,7 +54,7 @@ async function logout(){
  * @returns HTTP response containing {emailSent:true} if the restoration code was sent,
  * 404 response otherwise.
  */
-async function restoreAccountByEmail(email){
+async function restoreAccountByEmail(email) {
   const URL = 'restoreAccountByEmail';
   return await callAPI(URL, email);
 }
@@ -65,7 +65,7 @@ async function restoreAccountByEmail(email){
  * @param {Object} userdata Has username, password, email and resetCode fields.
  * @returns 
  */
-async function updateAccountByEmail(userdata){
+async function updateAccountByEmail(userdata) {
   const URL = 'updateAccountByEmailCode';
   return await callAPI(URL, userdata);
 }
@@ -76,21 +76,23 @@ async function updateAccountByEmail(userdata){
  * @param {Object} data Will be sent in a POST request to the above address.
  * @returns HTTP response if response status is 200, otherwise returns response status code.
  */
-async function callAPI(url, data){
+async function callAPI(url, data) {
   const URL = backendURL;
-  try{
-    const response = await fetch(URL + url, 
-      {method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)}
-      ,{mode:'cors'},);
-    if(response.status !== 200)
+  try {
+    const response = await fetch(URL + url,
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      }
+      , { mode: 'cors' },);
+    if (response.status !== 200)
       return response.status;
     return await response.json();
-  }catch(e) {
+  } catch (e) {
     console.log(e);
     throw e;
   }
@@ -111,13 +113,13 @@ async function saveRegistrationData(userdata) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(userdata),
-      mode:'cors'
+      mode: 'cors'
     });
     // Check for both 200 and 201 status codes
     if (response.ok) {
       return true;
     }
-    else{
+    else {
       throw new Error('Failed to save registration data');
     }
   } catch (error) {
@@ -131,17 +133,17 @@ async function saveRegistrationData(userdata) {
  * @param data
  * @returns {Promise<boolean>}
  */
-async function saveUpdatedData(data){
+async function saveUpdatedData(data) {
   const URL = backendURL + 'update';
   try {
-    const response = await fetch(URL,{
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data),
-    mode:'cors'
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      mode: 'cors'
     });
     if (response.status === 201) {
       console.log("Update successful")
@@ -150,7 +152,7 @@ async function saveUpdatedData(data){
     if (!response.ok) {
       throw new Error('Failed to update personal information');
     }
-  }catch(e){
+  } catch (e) {
     console.error(e);
     throw new Error();
   }
@@ -170,13 +172,13 @@ async function fetchTable() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie':getAuthCookie(document.cookie),
+        'authCookie': getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
     if (response.ok) {
       return await response.json();
-    }else{
+    } else {
       console.error('Error:', response.status);
       return null;
     }
@@ -191,18 +193,18 @@ async function fetchTable() {
  * @param competenceData
  * @returns {Promise<number>}
  */
-async function setCompetence(competenceData){
+async function setCompetence(competenceData) {
   const URL = backendURL + 'setCompetence';
   try {
-    const response = await fetch(URL,{
+    const response = await fetch(URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie':getAuthCookie(document.cookie),
+        'authCookie': getAuthCookie(document.cookie),
       },
       body: JSON.stringify(competenceData),
-      mode:'cors'
+      mode: 'cors'
     });
     if (response.ok) {
       console.log("Competence added.")
@@ -211,27 +213,28 @@ async function setCompetence(competenceData){
     else {
       return false;
     }
-  }catch(e){
+  } catch (e) {
     console.error(e);
     throw new Error();
   }
 }
+
 /**
  * Calls the api that sets the rows contents from the table 'availability'
  * @param availabilityData
  * @returns {Promise<void>}
  */
-async function setAvailability(availabilityData){
+async function setAvailability(availabilityData) {
   const URL = backendURL + 'setAvailability';
   try {
-    const response = await fetch(URL,{
+    const response = await fetch(URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(availabilityData),
-      mode:'cors'
+      mode: 'cors'
     });
     if (response.ok) {
       console.log("Availability added.")
@@ -240,7 +243,7 @@ async function setAvailability(availabilityData){
     else {
       return false;
     }
-  }catch(e){
+  } catch (e) {
     console.error(e);
   }
 }
@@ -258,7 +261,7 @@ async function fetchApplicants() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie':getAuthCookie(document.cookie),
+        'authCookie': getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
@@ -271,65 +274,69 @@ async function fetchApplicants() {
     console.error('Error fetching data', e);
   }
 }
+
 /**
  * Calls api to fetch competences for an applicant from database
  * @param person_id 
  * @returns 
  */
-async function getCompetences(person_id){
+async function getCompetences(person_id) {
   //console.log("getCompetences cookies: " + document.cookie);
   const URL = backendURL + `getCompetences/${person_id}`;
   try {
-    const response = await fetch(URL,{
+    const response = await fetch(URL, {
       method: 'GET',
       credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie':getAuthCookie(document.cookie),
+        'authCookie': getAuthCookie(document.cookie),
       },
-      mode:'cors'
+      mode: 'cors'
     });
     if (response.ok) {
       return await response.json();
-    }else{
+    } else {
       console.error('Error:', response.status);
       return null;
     }
-  }catch (e) {
+  } catch (e) {
     console.error(e)
   }
 }
+
 /**
  * Calls api to fetch availabilities for an applicant from database
  * @param person_id 
  * @returns 
  */
-async function getAvailabilities(person_id){
+async function getAvailabilities(person_id) {
   const URL = backendURL + `getAvailabilities/${person_id}`;
   try {
-    const response = await fetch(URL,{
+    const response = await fetch(URL, {
       method: 'GET',
       credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie':getAuthCookie(document.cookie),
-        },
-      mode:'cors'
+        'authCookie': getAuthCookie(document.cookie),
+      },
+      mode: 'cors'
     });
     if (response.ok) {
       return await response.json();
-    }else{
+    } else {
       console.error('Error:', response.status);
       return null;
     }
-  }catch (e) {
+  } catch (e) {
     console.error(e)
   }
 }
 
 
-export {Authenticate, logout, restoreAccountByEmail, saveRegistrationData,
-        updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence,
-        setAvailability, fetchApplicants, getCompetences, getAvailabilities}
+export {
+  Authenticate, logout, restoreAccountByEmail, saveRegistrationData,
+  updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence,
+  setAvailability, fetchApplicants, getCompetences, getAvailabilities
+}

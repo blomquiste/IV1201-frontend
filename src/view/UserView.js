@@ -2,7 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import '../styling/application.css'
 
-
+/**
+ * Renders the view for the user to se his current appliction.
+ * @param user user data.
+ * @param competenceArray  array of commpetences
+ * @param availabilityArray array of the availability.
+ * @returns  div with user view
+ */
 export default function UserView({user, competenceArray, availabilityArray}){
     function formatDate(dateString) {
         const date = new Date(dateString);
