@@ -77,9 +77,8 @@ export default function CompetenceView({ competences, handleCompetenceSave }) {
                         <select
                             id={"expertise"}
                             name={"expertise"}
-                            onChange={formik.handleChange}
-                            value={formik.values.expertise} >
-                            <option value="" label="Select area of expertise"></option>
+                            onChange={formik.handleChange}>
+                            <option value={formik.values.expertise || ''} label="Select area of expertise"></option>
                             {!competences ? (
                                 <option disabled>Loading competences...</option>) : (
                                 <>
