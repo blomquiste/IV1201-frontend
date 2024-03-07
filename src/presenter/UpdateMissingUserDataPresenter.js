@@ -4,7 +4,7 @@ import AccountUpdatedByEmailView from "../view/AccountUpdatedByEmailView"
 import {useState} from "react";
 import {restoreAccountByEmail, updateAccountByEmail} from '../integration/DBCaller'
 import AccountUpdateErrorView from "../view/AccountUpdateErrorView";
-
+import {useNavigate} from "react-router-dom";
 /**
  * Presenter that handles logic and state for updating user accounts that are missing username and password
  * @returns The relevant views successful and unsuccessful account update attempts.
@@ -15,7 +15,7 @@ export default function MissingUserDataUpdate(props){
   const [error, setError] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [emailNotFound, setEmailNotFound] = useState(false)
-
+  const navigate = useNavigate(); 
   /**
    * Takes the new username, password and emailed account restoration code and calls the
    * /UpdateAccountByEmailCode api on the backend.
@@ -44,17 +44,25 @@ export default function MissingUserDataUpdate(props){
    * @param {String} email Address to the user that is missing data
    */
   async function sendResetEmail(email){
-    console.log("jsoning email")
-    setUserEmail(email.email)
-    console.log(JSON.stringify(email))
-    const result = await restoreAccountByEmail(email)
-    console.log(result)
-    console.log(result.emailSent)
-    if(result === 404){
-      setEmailNotFound(true)
-    }
-    else if(result.emailSent)
-      setRestoreEmailSent(true);
+    try{
+      console.log("jsoning email")
+      setUserEmail(email.email)
+      console.log(JSON.stringify(email))
+      const result = await restoreAccountByEmail(email)
+      console.log(result)
+      console.log(result.emailSent)
+      if(result === 404){
+        setEmailNotFound(true)
+      }
+      if(result === 500){
+        navigate("/error")  
+      }
+      else if(result.emailSent)
+        setRestoreEmailSent(true);
+      }catch(e){
+        console.log(e)
+        navigate("/error");
+      }
   }
 
   return <>

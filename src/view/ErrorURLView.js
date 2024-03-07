@@ -5,11 +5,11 @@ import React from "react";
  * 
  * @returns server error message
  */
-export default function ErrorView() {
+export default function ErrorURLView() {
   const navigate = useNavigate();
   return (<>
     <h2>Server error</h2>
     <div>Service unavailable, contact the site admin if problem persists</div>
-    <button onClick={() => {navigate("/");window.location.reload();}}>return to start site</button>
+    <button onClick={() => {navigate("/");}}>return to start site</button>
   </>)
 }

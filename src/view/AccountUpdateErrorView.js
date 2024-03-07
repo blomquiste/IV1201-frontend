@@ -7,6 +7,6 @@ import {Link} from 'react-router-dom';
 export default function AccountUpdateErrorView(){
   return (<>
     <div>Failed to updata user data</div>
-    <p>Go back to start page? <Link to={"/login"}>Return</Link></p>
+    <p>Go back to start page? <Link to={"/"}>Return</Link></p>
   </>)
 }
