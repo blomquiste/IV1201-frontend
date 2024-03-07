@@ -2,7 +2,14 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 
 export default SummaryView;
-
+/**
+ * Renders the view for the summary of an application before it is sent.
+ * @param user user data.
+ * @param formdata the data from the forms.
+ * @param sendApplication send application button
+ * @param resetFormAndComponent reset button
+ * @returns view of the application data
+ */
 function SummaryView({user, formData, sendApplication, resetFormAndComponent}) {
     const navigate = useNavigate();
     const [submitted, setSubmitted] = useState(false);
