@@ -30,7 +30,6 @@ function RegistrationView({onRegister=[]}) {
         }
     }, [registered, navigate]);
 
-
     const formik = useFormik({
         // Manage form state
         initialValues: {
