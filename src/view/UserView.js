@@ -14,9 +14,16 @@ export default function UserView({user, competenceArray, availabilityArray}){
         if(compID===2) return "Roller coaster operation";
     }
 
+    function statusHandlerACB(status) {
+        if(status === 1) return "Unhandled";
+        if(status === 2) return "Accepted";
+        if(status === 3) return "Rejected";
+    }
+
     return (
         <div className={"mainContainer"}>
             <h2> {user.name}s application</h2>
+            {console.log(user)}
             {competenceArray.length === 0 && availabilityArray.length === 0 ? (
                 <button><Link to={"/apply"}>Apply now</Link></button> ) : (
                 <div>
@@ -39,10 +46,11 @@ export default function UserView({user, competenceArray, availabilityArray}){
                                     </div>
                                 ))}
                             </div>
-                            <button /*TODO*/>Edit application</button>
+                            <h3>Status</h3>
+                            <p>{statusHandlerACB(user.status_id)}</p>
                         </div>
                     </div>
-                    </div>
+                </div>
                     )}
                 </div>
             )

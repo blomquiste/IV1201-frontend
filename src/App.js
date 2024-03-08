@@ -55,7 +55,7 @@ function App() {
    * 
    */
   async function handleLogin(user){
-    let response; 
+    let response;
     try{
       response = await Authenticate(user);
       if(response === 404)
@@ -67,7 +67,7 @@ function App() {
         setFailedLogin(false)
         setUserObject(response)
         setLoggedIn(true)
-        response.role_id===1?setRecruiter(true):setRecruiter(false) //TODO
+        response.role_id===1?setRecruiter(true):setRecruiter(false)
         sessionStorage.setItem('user', JSON.stringify(response));
       }
     }catch(e){

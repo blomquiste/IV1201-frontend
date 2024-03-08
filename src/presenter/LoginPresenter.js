@@ -13,7 +13,7 @@ import Overview from "./OverviewPresenter";
  * @param {function} props.callDB - login function that calls the backend api to login user
  * @returns LoginView - view that shows the login page
  * FailedLoginView - shows the LoginView with added error message about failed login
- * UserView - landing page after succesful login
+ * UserView - landing page after successful login
  */
 export default function Login(props) {
     return (<>

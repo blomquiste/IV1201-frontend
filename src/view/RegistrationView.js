@@ -23,9 +23,12 @@ function RegistrationView({onRegister=[]}) {
 
     useEffect(() => {
         if (registered) {
-            navigate('/');
+            const delayNavigation = setTimeout(() => {
+                navigate('/');
+            }, 3000);
+            return () => clearTimeout(delayNavigation); // Cleanup function to clear the timeout if component unmounts
         }
-    }, [registered]);
+    }, [registered, navigate]);
 
     const formik = useFormik({
         // Manage form state
@@ -66,6 +69,7 @@ function RegistrationView({onRegister=[]}) {
     return(
         <div className={"mainContainer"}>
             <h1>Register here</h1>
+            {registered && <h3 className={"success-message"}>You have successfully registered an account!</h3>}
             <div className={"inputContainer"}>
                 <form onSubmit={formik.handleSubmit}>
                     <div className={"nameFields"}>
