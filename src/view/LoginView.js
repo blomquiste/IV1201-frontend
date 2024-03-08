@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import '../styling/forms.css'
 import {Link} from 'react-router-dom';
+
 /**
- * 
- * @param {function} onLogin takes username and password and passes it to the login API in the backend
- * @returns forms for entering username and password
+ * The LoginView contains the sign-in form and functionality
+ * @param props.onLogin takes username and password and passes it to the login API in the backend
+ *
  */
 function LoginView(props) {
-    let username ="";
-    let password="";
+    let username = "";
+    let password= "";
     const [error, setError] = useState('');
     function usernameHandlerACB(e){username=e.target.value; }
     function passwordHandlerACB(e){password=e.target.value}
@@ -32,8 +33,6 @@ function LoginView(props) {
         <div className={"mainContainer"}>
             <h1>Welcome!</h1>
             <p>Please sign in before submitting an application</p>
-            <div>JoelleWilkinson</div>
-            <div>LiZ98qvL8Lw</div>
             <form onSubmit={handleSubmit}>
                 <div className={"inputGroup"}>
                     <input type="username"

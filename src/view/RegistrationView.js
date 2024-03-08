@@ -6,7 +6,7 @@ import '../styling/forms.css'
 
 /**
  *
- * The RegistrationView component handles user registration by capturing user  input,
+ * The RegistrationView component handles user registration by capturing user input,
  * validating the form fields and submitting them to the server which inserts into the database.
  * On successful registration the user is redirected to the login page.
  * @param onRegister A function to handle user registration.
