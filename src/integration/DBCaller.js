@@ -10,7 +10,9 @@ const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
 async function Authenticate(usernameAndPassword) {
   const URL = 'login';
   const response = await callAPI(URL, usernameAndPassword);
-  document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure: true";
+  console.log("jwt: " + response.JWTToken)
+  //document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure: true";
+  const cookie = sessionStorage.setItem('cookie', "JWTToken=" + response.JWTToken + ";SameSite=None; Secure: true");
   return response;
 }
 /**
@@ -84,7 +86,8 @@ async function saveRegistrationData(userdata) {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       body: JSON.stringify(userdata),
       mode: 'cors'
@@ -113,7 +116,8 @@ async function saveUpdatedData(data) {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       body: JSON.stringify(data),
       mode: 'cors'
@@ -145,7 +149,7 @@ async function fetchTable() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie': getAuthCookie(document.cookie),
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       mode: 'cors'
     });
@@ -174,7 +178,7 @@ async function setCompetence(competenceData) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie': getAuthCookie(document.cookie),
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       body: JSON.stringify(competenceData),
       mode: 'cors'
@@ -204,7 +208,8 @@ async function setAvailability(availabilityData) {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       body: JSON.stringify(availabilityData),
       mode: 'cors'
@@ -234,7 +239,7 @@ async function fetchApplicants() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie': getAuthCookie(document.cookie),
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       mode: 'cors'
     });
@@ -255,6 +260,7 @@ async function fetchApplicants() {
  */
 async function getCompetences(person_id) {
   const URL = backendURL + `getCompetences/${person_id}`;
+  console.log("authcookie: " + getAuthCookie(sessionStorage.getItem('cookie')))
   try {
     const response = await fetch(URL, {
       method: 'GET',
@@ -262,7 +268,7 @@ async function getCompetences(person_id) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie': getAuthCookie(document.cookie),
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       mode: 'cors'
     });
@@ -292,7 +298,7 @@ async function getAvailabilities(person_id) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie': getAuthCookie(document.cookie),
+        'authcookie': getAuthCookie(sessionStorage.getItem('cookie')),
       },
       mode: 'cors'
     });
