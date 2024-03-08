@@ -226,7 +226,7 @@ async function setAvailability(availabilityData) {
  * @returns {Promise<number|JSX.Element|any>}
  */
 async function fetchApplicants() {
-  const URL = backendURL + 'fetchapplicants';
+  const URL = backendURL + 'fetchApplicants';
   try {
     const response = await fetch(URL, {
       method: 'GET',
