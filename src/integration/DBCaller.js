@@ -1,5 +1,5 @@
-const backendURL = 'http://localhost:8000/';
-//const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+//const backendURL = 'http://localhost:8000/';
+const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
 
 /**
  * Calls backend api to authenticate a user on login. 
