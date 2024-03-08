@@ -77,9 +77,9 @@ async function updateAccountByEmail(userdata) {
  * @returns HTTP response if response status is 200, otherwise returns response status code.
  */
 async function callAPI(url, data) {
-  const URL = backendURL;
+  const URL = backendURL+url;
   try {
-    const response = await fetch(URL + url,
+    const response = await fetch(URL,
       {
         method: 'POST',
         headers: {
