@@ -10,7 +10,7 @@ const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
 async function Authenticate(usernameAndPassword) {
   const URL = 'login';
   const response = await callAPI(URL, usernameAndPassword);
-  document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure";
+  document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure: true";
   return response;
 }
 /**
