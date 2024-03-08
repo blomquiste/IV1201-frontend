@@ -57,7 +57,6 @@ export default function Applicant({ user, handleLogout }) {
     async function updateData(data) {
         try {
             const response = await saveUpdatedData(data);
-            console.log("App.js, saved data: ", response);
             if (response) {
                 console.log("User info updated successfully ", response);
                 setUpdated(true);
@@ -158,7 +157,6 @@ export default function Applicant({ user, handleLogout }) {
                 from_date,
                 to_date
             }));
-            console.log("sendApplication: ", availabilityData);
 
             const responseCompetence = await sendCompetence(competenceData);
             const responseAvailability = await sendAvailability(availabilityData);
@@ -197,14 +195,12 @@ export default function Applicant({ user, handleLogout }) {
  */
     async function sendAvailability(availabilities) {
         try {
-            console.log(availabilities);
             const responses = await Promise.all(availabilities.map(availability => setAvailability(availability)));
             return responses.every(response => response !== null);
         } catch (e) {
             console.error("Error sending availabilities:", e);
         }
     }
-    //<NavigationBar user={user} handleLogout={handleLogout}/>
     return (<div>
 
         {activeComponent === 1 && !error && <UserInformationView user={user} handleSave={updateData} showNext={showNext} />}

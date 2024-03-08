@@ -7,6 +7,7 @@ import MissingUserDataUpdate from "./presenter/UpdateMissingUserDataPresenter";
 import Applicant from "./presenter/ApplicantPresenter"
 import User from "./presenter/UserPresenter"
 import Error from "./view/ErrorView";
+import UnauthorizedView from "./view/UnauthorizedView";
 import ErrorURL from "./view/ErrorURLView";
 import NavigationBar from "./components/NavigationBar";
 import Overview from "./presenter/OverviewPresenter";
@@ -58,8 +59,10 @@ function App() {
     let response;
     try{
       response = await Authenticate(user);
-      if(response === 404)
+      if(response === 404){
         setFailedLogin(true)
+        return failedLogin;
+      }
       else if(response === 500){
         throw new Error("500 http code from server")
       }
@@ -69,12 +72,11 @@ function App() {
         setLoggedIn(true)
         response.role_id===1?setRecruiter(true):setRecruiter(false)
         sessionStorage.setItem('user', JSON.stringify(response));
+        return true;
       }
     }catch(e){
       console.error(`error in callDB: ${e}`)
       setError(true)
-      //navigate('/error');
-      //window.location.href='/error';
     }
   }
     /**
@@ -125,7 +127,7 @@ function App() {
                        user = {userObject} /> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
                        user = {userObject} /> : <Error/>} />
-                <Route path="/overview" element={loggedIn && recruiter ? <Overview/> : <Error/>}/>
+                <Route path="/overview" element={loggedIn && recruiter ? <Overview/> : <UnauthorizedView/>}/>
                 <Route path="/" element={error && <Error/>}  />
                 <Route path="/error" element={ <ErrorURL />} />
             </Routes>
