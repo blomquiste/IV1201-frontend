@@ -257,14 +257,14 @@ async function getCompetences(person_id) {
   const URL = backendURL + `getCompetences/${person_id}`;
   try {
     const response = await fetch(URL, {
-      method: 'GET',
-      credentials: 'include',
+      method:'GET',
+      credentials:'include',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'authCookie': getAuthCookie(document.cookie),
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
-      mode: 'cors'
+      mode:'cors'
     });
     if (response.ok) {
       return await response.json();
@@ -292,9 +292,9 @@ async function getAvailabilities(person_id) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie': getAuthCookie(document.cookie),
+        'authCookie':getAuthCookie(document.cookie),
       },
-      mode: 'cors'
+      mode:'cors'
     });
     if (response.ok) {
       return await response.json();
