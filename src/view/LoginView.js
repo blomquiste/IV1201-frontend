@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styling/forms.css'
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 /**
  * The LoginView contains the sign-in form and functionality
@@ -8,19 +8,26 @@ import {Link} from 'react-router-dom';
  *
  */
 function LoginView(props) {
+    const navigate = useNavigate();
+    const [loggedIn, setLoggedIn] = useState(false);
     let username = "";
     let password= "";
     const [error, setError] = useState('');
     function usernameHandlerACB(e){username=e.target.value; }
     function passwordHandlerACB(e){password=e.target.value}
 
-    //two different functions are called at two different places in the forms, both handleSubmit and loginACB
-    function loginACB(){
-        props.onLogin({
+    async function loginACB() {
+        const result = await props.onLogin({
             username: username,
             password: password
-        })
+        });
+        if (result===true){
+            setLoggedIn(true);
+        }else{
+            navigate("/error")
+        }
     }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!username || !password) {

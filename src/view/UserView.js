@@ -29,11 +29,10 @@ export default function UserView({user, competenceArray, availabilityArray}){
     return (
         <div className={"mainContainer"}>
             <h2> {user.name}s application</h2>
-            {console.log(user)}
             {competenceArray.length === 0 && availabilityArray.length === 0 ? (
                 <button><Link to={"/apply"}>Apply now</Link></button> ) : (
                 <div>
-                    <p>You have successfully submitted. The following information is registered to your account.</p>
+                    <p>You have successfully submitted an application. The following information is registered to your account.</p>
                     <div className={"applicationContainer"}>
                         <div className="textContainer">
                             <div className="competence-container">

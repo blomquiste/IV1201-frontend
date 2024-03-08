@@ -1,8 +1,7 @@
-import {Link} from 'react-router-dom';
 import {useNavigate} from "react-router-dom";
 import React from "react";
 /**
- * 
+ * View to be shown to user if there is a server error
  * @returns server error message
  */
 export default function ErrorView() {

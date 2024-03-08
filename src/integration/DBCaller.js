@@ -1,5 +1,5 @@
-const backendURL = 'http://localhost:8000/';
-//const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
+//const backendURL = 'http://localhost:8000/';
+const backendURL = 'https://archdes-abbcfaefce39.herokuapp.com/'
 
 /**
  * Calls backend api to authenticate a user on login. 
@@ -10,9 +10,7 @@ const backendURL = 'http://localhost:8000/';
 async function Authenticate(usernameAndPassword) {
   const URL = 'login';
   const response = await callAPI(URL, usernameAndPassword);
-  console.log(response.JWTToken)
   document.cookie = "JWTToken=" + response.JWTToken + ";SameSite=None; Secure";
-  console.log('auth token:' + getAuthCookie(document.cookie))
   return response;
 }
 /**
@@ -22,30 +20,6 @@ async function Authenticate(usernameAndPassword) {
  */
 function getAuthCookie(cookies) {
   return cookies.split(';')[0].split('=')[1];
-}
-/**
- * TODO: Log out functionality 
- */
-async function logout() {
-  /*const URL = backendURL + 'logout'
-  try {
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      mode:'cors'
-    });
-    console.log(response)
-    if (response.ok){
-      console.log("Logged out successful");
-    }else{
-      console.error('Failed to logout');
-    }
-  } catch (e) {
-    console.error('Error during logout:', e);
-  }*/
 }
 /**
  * Calls the API to check if account with this email exists and if it is missing username and password.
@@ -115,7 +89,6 @@ async function saveRegistrationData(userdata) {
       body: JSON.stringify(userdata),
       mode: 'cors'
     });
-    // Check for both 200 and 201 status codes
     if (response.ok) {
       return true;
     }
@@ -281,7 +254,6 @@ async function fetchApplicants() {
  * @returns 
  */
 async function getCompetences(person_id) {
-  //console.log("getCompetences cookies: " + document.cookie);
   const URL = backendURL + `getCompetences/${person_id}`;
   try {
     const response = await fetch(URL, {
@@ -302,6 +274,7 @@ async function getCompetences(person_id) {
     }
   } catch (e) {
     console.error(e)
+    return e;
   }
 }
 
@@ -336,7 +309,7 @@ async function getAvailabilities(person_id) {
 
 
 export {
-  Authenticate, logout, restoreAccountByEmail, saveRegistrationData,
+  Authenticate, restoreAccountByEmail, saveRegistrationData,
   updateAccountByEmail, fetchTable, saveUpdatedData, setCompetence,
   setAvailability, fetchApplicants, getCompetences, getAvailabilities
 }
