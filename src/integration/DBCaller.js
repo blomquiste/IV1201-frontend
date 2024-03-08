@@ -145,6 +145,7 @@ async function fetchTable() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'authCookie': getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
@@ -173,6 +174,7 @@ async function setCompetence(competenceData) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'authCookie': getAuthCookie(document.cookie),
       },
       body: JSON.stringify(competenceData),
       mode: 'cors'
@@ -232,6 +234,7 @@ async function fetchApplicants() {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'authCookie': getAuthCookie(document.cookie),
       },
       mode: 'cors'
     });
@@ -259,6 +262,7 @@ async function getCompetences(person_id) {
       headers: {
         'Accept':'application/json',
         'Content-Type':'application/json',
+        'authCookie':getAuthCookie(document.cookie),
       },
       mode:'cors'
     });
@@ -266,6 +270,7 @@ async function getCompetences(person_id) {
       return await response.json();
     } else {
       console.error('Error:', response.status);
+      return null;
     }
   } catch (e) {
     console.error(e)
@@ -287,9 +292,9 @@ async function getAvailabilities(person_id) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'authCookie':getAuthCookie(document.cookie),
+        'authCookie': getAuthCookie(document.cookie),
       },
-      mode:'cors'
+      mode: 'cors'
     });
     if (response.ok) {
       return await response.json();
