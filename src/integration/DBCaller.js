@@ -88,7 +88,7 @@ async function callAPI(url, data) {
         },
         body: JSON.stringify(data)
       }
-      , { mode: 'cors' },);
+      , { mode:'cors'},);
     if (response.status !== 200)
       return response.status;
     return await response.json();
