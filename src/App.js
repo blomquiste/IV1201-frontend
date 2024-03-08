@@ -127,7 +127,7 @@ function App() {
                        user = {userObject} /> : <Error/>} />
                 <Route path="/apply" element={loggedIn ? <Applicant
                        user = {userObject} /> : <Error/>} />
-                <Route path="/overview" element={loggedIn && recruiter ? <Overview/> : <Error/>}/>
+                <Route path="/overview" element={loggedIn && recruiter ? <Overview/> : <UnauthorizedView/>}/>
                 <Route path="/" element={error && <Error/>}  />
                 <Route path="/error" element={ <ErrorURL />} />
             </Routes>
