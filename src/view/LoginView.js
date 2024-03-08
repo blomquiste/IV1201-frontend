@@ -20,12 +20,12 @@ function LoginView(props) {
         const result = await props.onLogin({
             username: username,
             password: password
-        });
+        });/*
         if (result===true){
             setLoggedIn(true);
         }else{
             navigate("/error")
-        }
+        }*/
     }
 
     const handleSubmit = (e) => {
