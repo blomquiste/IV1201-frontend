@@ -56,27 +56,27 @@ function App() {
    * 
    */
   async function handleLogin(user){
-    let response;
+    let response; 
     try{
       response = await Authenticate(user);
-      if(response === 404){
+      if(response === 404)
         setFailedLogin(true)
-        return failedLogin;
-      }
       else if(response === 500){
+        console.log("hello")
         throw new Error("500 http code from server")
       }
       else{
         setFailedLogin(false)
         setUserObject(response)
         setLoggedIn(true)
-        response.role_id===1?setRecruiter(true):setRecruiter(false)
+        response.role_id===1?setRecruiter(true):setRecruiter(false) //TODO
         sessionStorage.setItem('user', JSON.stringify(response));
-        return true;
       }
     }catch(e){
       console.error(`error in callDB: ${e}`)
       setError(true)
+      //navigate('/error');
+      //window.location.href='/error';
     }
   }
     /**
