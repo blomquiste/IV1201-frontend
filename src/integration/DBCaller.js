@@ -262,7 +262,6 @@ async function getCompetences(person_id) {
       headers: {
         'Accept':'application/json',
         'Content-Type':'application/json',
-        'authCookie':getAuthCookie(document.cookie),
       },
       mode:'cors'
     });
