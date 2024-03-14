@@ -21,9 +21,9 @@ https://archdes-frontend-5528c891010d.herokuapp.com/
 * Install Node.js and PostgreSQL
 * Create the database by running the existing-database.sql script in psql
 * Clone this repository ```git clone ...```
-* In you terminal, go to the cloned directory ```cd .../IV1201```
-* Install all required packages with npm install in both frontend and backend directories ```cd backend; npm install; cd ../frontend; npm install```
-* In both backend and frontend run ```npm start```
+* In your terminal, go to the cloned directory ```cd .../IV1201-frontend```
+* Install all required packages with npm install.
+* Start the server with ```npm run dev```
   Runs the app in the development mode.\
   Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
   The page will reload when you make changes.\
